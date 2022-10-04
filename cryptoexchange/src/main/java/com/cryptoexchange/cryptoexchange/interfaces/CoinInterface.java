@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.cryptoexchange.cryptoexchange.payload.response.CoinResponse;
 
-//Comunicação com a API do ViaCEP
+//Comunicação com a API do bitPreço
 @FeignClient(url = "https://api.bitpreco.com/", name = "viacep")
 
 public interface CoinInterface {

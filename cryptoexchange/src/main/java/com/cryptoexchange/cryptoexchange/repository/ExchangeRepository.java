@@ -6,15 +6,15 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.cryptoexchange.cryptoexchange.model.Coin;
+import com.cryptoexchange.cryptoexchange.model.Exchange;
 
 
 // Repositório criado com JPARepository para implementação das imformações no BD
-public interface CoinRepository  extends JpaRepository<Coin, Long>{
+public interface ExchangeRepository extends JpaRepository<Exchange, Long>{
 
-    List<Coin> findById(Integer id);
+    List<Exchange> findByExchange(String exchange);
 
-    Coin getCoinById(Integer id);
+    Exchange getExchangeById(Integer id);
 
     @Transactional
     void deleteById(Integer id);

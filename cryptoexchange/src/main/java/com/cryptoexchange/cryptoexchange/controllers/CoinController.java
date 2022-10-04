@@ -18,10 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cryptoexchange.cryptoexchange.model.Coin;
 import com.cryptoexchange.cryptoexchange.interfaces.CoinInterface;
 import com.cryptoexchange.cryptoexchange.repository.CoinRepository;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import com.cryptoexchange.cryptoexchange.payload.response.CoinResponse;
+
 
 @RestController
 @RequestMapping ("/api")
+@Api(value = "API controle de criptomoedas com cotação atualizada")
 public class CoinController {
 
     @Autowired
@@ -30,13 +36,16 @@ public class CoinController {
     @Autowired
     private CoinRepository coinRepository;
 
+    @ApiOperation(value="Cria uma nova moeda")
     @GetMapping("/{market}/ticker")
     public ResponseEntity<CoinResponse> getByMarket(@PathVariable String market) {
 
         //Buscando resultado da API do ViaCEP
         CoinResponse response = coinInterface.getCoinByCoin(market);
 
+        // Cria uma nova moeda coin
         if(response.getMarket() != null){
+
             Coin coin = new Coin(
                 response.getId(),
                 response.getSuccess(),
@@ -52,33 +61,40 @@ public class CoinController {
                 response.getTimestamp()
             );
 
+            // Salva a moeda no BD
             coinRepository.save(coin);
         }
 
+        // Retorna a moeda no corpo da requisição ou constrói uma build nula
         return response.getMarket() != null ? ResponseEntity.ok().body(response)
         : ResponseEntity.notFound().build();
         
     }
 
+    @ApiOperation(value = "Lista todas as moedas")
     @GetMapping(value = "/coins/list/all")
     public ResponseEntity<List<Coin>> listCoins(){
         
+        // Retorna uma lista com todas as moedas
         return new ResponseEntity<List<Coin>>(coinRepository.findAll(), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Busca uma moeda através de seu Id")
     @GetMapping(value = "/coins/list/{id}")
     public ResponseEntity <List<Coin>> listCoinsById(@PathVariable("id") Integer id){
 
+        // Retorna uma moeda definida pelo Id
         return new ResponseEntity<List<Coin>>(coinRepository.findById(id), HttpStatus.OK);
     }
 
-
+    @ApiOperation(value = "Atualiza as informações de uma moeda")
     @PutMapping("/coins/update/{id}")
     public ResponseEntity<Coin> update (@PathVariable("id") Integer id, @RequestBody Coin coin){
 
+        // Busca as informações da moeda no BD
         Coin _coin = coinRepository.getCoinById(id);
-
         
+        // Realiza o update das informações da moeda
         _coin.setSuccess(coin.getSuccess());
         _coin.setMarket(coin.getMarket());
         _coin.setLast(coin.getLast());
@@ -90,24 +106,19 @@ public class CoinController {
         _coin.setSell(coin.getSell());
         _coin.setTimestamp(coin.getTimestamp());
 
-
-        System.out.println("_coin");
-
+        // Retorna as novas informações da moeda com status OK
         return new ResponseEntity<>(coinRepository.save(_coin), HttpStatus.OK);
-
     }
 
-
+    @ApiOperation(value = "Deleta uma moeda através de seu Id")
     @DeleteMapping(value = "/coins/delete/{id}")
-    public ResponseEntity<Coin> delete(@PathVariable("id") Integer id) {
+    public ResponseEntity<Coin> delete (@PathVariable("id") Integer id) {
 
+        // Deleta uma moeda do BD através do ID
         coinRepository.deleteById(id);
         
+        // Retorna nenhuma informação ao cliente
         return ResponseEntity.noContent().build();
     }
 
-
-    
-
-    
 }

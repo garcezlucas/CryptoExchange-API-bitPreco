@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 
-
+// Cria a tabela coin e suas colunas no BD
 @Entity
 @Table(name = "coin")
 public class Coin {

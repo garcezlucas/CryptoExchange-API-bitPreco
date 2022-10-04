@@ -1,5 +1,6 @@
 package com.cryptoexchange.cryptoexchange.payload.response;
 
+
 public class CoinResponse {
         
     private Integer id;
