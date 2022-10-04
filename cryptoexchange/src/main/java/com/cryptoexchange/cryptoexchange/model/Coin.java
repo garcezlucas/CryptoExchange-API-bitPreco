@@ -1,37 +1,63 @@
-package com.cryptoexchange.cryptoexchange;
+package com.cryptoexchange.cryptoexchange.model;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 
+
+@Entity
+@Table(name = "coin")
 public class Coin {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "coin_id")
+    private Integer id;
+
+    @Column(name = "coin_success")
     private String success;
+
+    @Column(name = "coin_market")
     private String market;
+
+    @Column(name = "coin_last")
     private Double last;
+
+    @Column(name = "coin_high")
     private Double high;
+
+    @Column(name = "coin_low")
     private Double low;  
+
+    @Column(name = "coin_vol")
     private Double vol;
+
+    @Column(name = "coin_avg")
     private Double avg;
+
+    @Column(name = "coin_var")
     private Double var;
+
+    @Column(name = "coin_buy")
     private Double buy;
+
+    @Column(name = "coin_sell")
     private Double sell;
+
+    @Column(name = "coin_timestamp")
     private String timestamp;
 
 
-    public Coin() {}
+    public Coin() {
 
-    public Coin(
-                String success,
-                String market,
-                Double last,
-                Double high,
-                Double low,
-                Double vol,
-                Double avg, 
-                Double var,
-                Double buy, 
-                Double sell,
-                String timestamp
-            ) 
-    {
+    }
+
+    public Coin( Integer id, String success, String market, Double last, Double high,Double low, Double vol, Double avg, Double var, Double buy, Double sell,String timestamp) {
+        this.id = id;
         this.success = success;
         this.market = market;
         this.last = last;
@@ -131,6 +157,18 @@ public class Coin {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Coin findCoinById(Integer id2) {
+        return null;
     }
 
 }
