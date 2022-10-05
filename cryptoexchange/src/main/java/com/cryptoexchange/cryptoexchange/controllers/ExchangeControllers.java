@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cryptoexchange.cryptoexchange.model.Exchange;
-import com.cryptoexchange.cryptoexchange.repository.ExchangeRepository;
+import com.cryptoexchange.cryptoexchange.models.Exchange;
+import com.cryptoexchange.cryptoexchange.payloads.responses.ExchangeResponse;
+import com.cryptoexchange.cryptoexchange.repositories.ExchangeRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,17 +31,19 @@ public class ExchangeControllers {
     private ExchangeRepository exchangeRepository;
 
     @ApiOperation(value = "Inseri uma nova transação no BD")
+    //localhost:8080/api/auth/exchanges/insert - POST
     @PostMapping("/exchanges/insert")
-    public ResponseEntity<Exchange> insertExchange(@RequestBody Exchange exchange){
+    public ResponseEntity<ExchangeResponse> insertExchange(@RequestBody ExchangeResponse exchange){
         
         //Salva a nova transação no BD
         exchangeRepository.save(exchange);
 
         // Retorna a nova transação do BD com status CREATED
-        return new ResponseEntity<Exchange>(exchange,  HttpStatus.CREATED);
+        return new ResponseEntity<ExchangeResponse>(exchange,  HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Lista todas as transações salvas no BD")
+    //localhost:8080/api/auth/exchanges/all - GET
     @GetMapping(value = "/exchanges/all")
     public ResponseEntity<List<Exchange>> listExchanges(){
         
@@ -49,6 +52,7 @@ public class ExchangeControllers {
     }
 
     @ApiOperation(value = "Busca uma transação no BD atraves de seu Id")
+    //localhost:8080/api/auth/exchanges/compra - GET
     @GetMapping(value = "/exchanges/{exchange}")
     public ResponseEntity<List<Exchange>> listExchangesByExchange(@PathVariable("exchange") String exchange){
 
@@ -57,6 +61,7 @@ public class ExchangeControllers {
     }
 
     @ApiOperation(value = "Atualiza uma transação salva no BD")
+    //localhost:8080/api/auth/exchanges/update/1 - PUT
     @PutMapping("/exchanges/update/{id}")
     public ResponseEntity<Exchange> update (@PathVariable("id") Integer id, @RequestBody Exchange exchange){
 
@@ -75,6 +80,7 @@ public class ExchangeControllers {
     }
 
     @ApiOperation(value = "Deleta uma transação do BD")
+    //localhost:8080/api/auth/exchanges/delete/1 - DELETE
     @DeleteMapping(value = "/exchanges/delete/{id}")
     public ResponseEntity<Exchange> delete (@PathVariable("id") Integer id) {
 

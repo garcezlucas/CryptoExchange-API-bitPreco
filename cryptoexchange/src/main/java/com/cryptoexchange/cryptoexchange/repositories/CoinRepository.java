@@ -1,4 +1,4 @@
-package com.cryptoexchange.cryptoexchange.repository;
+package com.cryptoexchange.cryptoexchange.repositories;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.cryptoexchange.cryptoexchange.model.Coin;
+import com.cryptoexchange.cryptoexchange.models.Coin;
 
 
 // Repositório criado com JPARepository para implementação das imformações no BD

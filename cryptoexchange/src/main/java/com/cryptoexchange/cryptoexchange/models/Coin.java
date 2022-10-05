@@ -1,4 +1,4 @@
-package com.cryptoexchange.cryptoexchange.model;
+package com.cryptoexchange.cryptoexchange.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

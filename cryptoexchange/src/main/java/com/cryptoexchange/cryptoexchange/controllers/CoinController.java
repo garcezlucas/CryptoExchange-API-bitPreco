@@ -15,18 +15,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cryptoexchange.cryptoexchange.model.Coin;
 import com.cryptoexchange.cryptoexchange.interfaces.CoinInterface;
-import com.cryptoexchange.cryptoexchange.repository.CoinRepository;
+import com.cryptoexchange.cryptoexchange.models.Coin;
+import com.cryptoexchange.cryptoexchange.payloads.responses.CoinResponse;
+import com.cryptoexchange.cryptoexchange.repositories.CoinRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-import com.cryptoexchange.cryptoexchange.payload.response.CoinResponse;
-
 
 @RestController
-@RequestMapping ("/api")
+@RequestMapping ("/api/auth")
 @Api(value = "API controle de criptomoedas com cotação atualizada")
 public class CoinController {
 
@@ -37,6 +36,7 @@ public class CoinController {
     private CoinRepository coinRepository;
 
     @ApiOperation(value="Cria uma nova moeda")
+    //localhost:8080/api/auth/btc-brl/ticket - GET
     @GetMapping("/{market}/ticker")
     public ResponseEntity<CoinResponse> getByMarket(@PathVariable String market) {
 
@@ -72,6 +72,7 @@ public class CoinController {
     }
 
     @ApiOperation(value = "Lista todas as moedas")
+    //localhost:8080/api/auth/coins?list/all - GET
     @GetMapping(value = "/coins/list/all")
     public ResponseEntity<List<Coin>> listCoins(){
         
@@ -80,6 +81,7 @@ public class CoinController {
     }
 
     @ApiOperation(value = "Busca uma moeda através de seu Id")
+    //localhost:8080/api/coins/list/1 - GET
     @GetMapping(value = "/coins/list/{id}")
     public ResponseEntity <List<Coin>> listCoinsById(@PathVariable("id") Integer id){
 
@@ -88,6 +90,7 @@ public class CoinController {
     }
 
     @ApiOperation(value = "Atualiza as informações de uma moeda")
+    //localhost:8080/api/auth/coins/update/1 - PUT
     @PutMapping("/coins/update/{id}")
     public ResponseEntity<Coin> update (@PathVariable("id") Integer id, @RequestBody Coin coin){
 
@@ -111,6 +114,7 @@ public class CoinController {
     }
 
     @ApiOperation(value = "Deleta uma moeda através de seu Id")
+    //localhost:8080/api/auth/coins/delete/1 - DELETE
     @DeleteMapping(value = "/coins/delete/{id}")
     public ResponseEntity<Coin> delete (@PathVariable("id") Integer id) {
 

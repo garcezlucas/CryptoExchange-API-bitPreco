@@ -1,5 +1,4 @@
-package com.cryptoexchange.cryptoexchange.payload.response;
-
+package com.cryptoexchange.cryptoexchange.payloads.responses;
 
 public class CoinResponse {
         

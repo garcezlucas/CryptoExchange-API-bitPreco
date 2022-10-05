@@ -1,20 +1,27 @@
-package com.cryptoexchange.cryptoexchange.payload.response;
-
+package com.cryptoexchange.cryptoexchange.payloads.responses;
 
 public class ExchangeResponse {
     
     private Integer id;
-    private String type;
+
+    private String market;
+
+    private String exchange;
+
     private Double value;
+
     private Double amount;
+
     private String date; 
 
     public ExchangeResponse() {
 
     }
 
-    public ExchangeResponse(Integer Id, String type, Double amount, String date){
-        this.type = type;
+    public ExchangeResponse(Integer Id, String market, String exchange, Double value, Double amount, String date){
+        this.market = market;
+        this.exchange = exchange;
+        this.value = value;
         this.amount = amount;
         this.date = date;
 
@@ -28,12 +35,12 @@ public class ExchangeResponse {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getExchange() {
+        return exchange;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setExchange(String exchange) {
+        this.exchange = exchange;
     }
 
     public Double getValue() {
@@ -58,6 +65,14 @@ public class ExchangeResponse {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getMarket() {
+        return market;
+    }
+
+    public void setMarket(String market) {
+        this.market = market;
     }
 
 }

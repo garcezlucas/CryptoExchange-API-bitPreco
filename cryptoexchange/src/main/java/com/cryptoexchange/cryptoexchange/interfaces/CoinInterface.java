@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.cryptoexchange.cryptoexchange.payload.response.CoinResponse;
+import com.cryptoexchange.cryptoexchange.payloads.responses.CoinResponse;
 
 //Comunicação com a API do bitPreço
 @FeignClient(url = "https://api.bitpreco.com/", name = "viacep")
