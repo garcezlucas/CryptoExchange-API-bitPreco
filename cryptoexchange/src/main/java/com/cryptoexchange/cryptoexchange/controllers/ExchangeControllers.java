@@ -1,6 +1,6 @@
 package com.cryptoexchange.cryptoexchange.controllers;
 
-    import java.util.List;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cryptoexchange.cryptoexchange.models.Exchange;
-import com.cryptoexchange.cryptoexchange.payloads.responses.ExchangeResponse;
 import com.cryptoexchange.cryptoexchange.repositories.ExchangeRepository;
 
 import io.swagger.annotations.Api;
@@ -23,7 +22,7 @@ import io.swagger.annotations.ApiOperation;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 @Api(value = "API para controle de transações de criptomoedas")
 public class ExchangeControllers {
     
@@ -33,13 +32,13 @@ public class ExchangeControllers {
     @ApiOperation(value = "Inseri uma nova transação no BD")
     //localhost:8080/api/auth/exchanges/insert - POST
     @PostMapping("/exchanges/insert")
-    public ResponseEntity<ExchangeResponse> insertExchange(@RequestBody ExchangeResponse exchange){
+    public ResponseEntity<Exchange> insertExchange(@RequestBody Exchange exchange){
         
         //Salva a nova transação no BD
         exchangeRepository.save(exchange);
 
         // Retorna a nova transação do BD com status CREATED
-        return new ResponseEntity<ExchangeResponse>(exchange,  HttpStatus.CREATED);
+        return new ResponseEntity<Exchange>(exchange,  HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Lista todas as transações salvas no BD")
@@ -63,7 +62,7 @@ public class ExchangeControllers {
     @ApiOperation(value = "Atualiza uma transação salva no BD")
     //localhost:8080/api/auth/exchanges/update/1 - PUT
     @PutMapping("/exchanges/update/{id}")
-    public ResponseEntity<Exchange> update (@PathVariable("id") Integer id, @RequestBody Exchange exchange){
+    public ResponseEntity<Exchange> update (@PathVariable("id") Long id, @RequestBody Exchange exchange){
 
         // Busca as informações da transação no BD através do Id
         Exchange _exchange = exchangeRepository.getExchangeById(id);
@@ -71,6 +70,7 @@ public class ExchangeControllers {
         // Realiza o update das informações da transação
         _exchange.setMarket(exchange.getMarket());
         _exchange.setExchange(exchange.getExchange());
+        _exchange.setValue(exchange.getValue());
         _exchange.setAmount(exchange.getAmount());
         _exchange.setDate(exchange.getDate());
 
@@ -82,7 +82,7 @@ public class ExchangeControllers {
     @ApiOperation(value = "Deleta uma transação do BD")
     //localhost:8080/api/auth/exchanges/delete/1 - DELETE
     @DeleteMapping(value = "/exchanges/delete/{id}")
-    public ResponseEntity<Exchange> delete (@PathVariable("id") Integer id) {
+    public ResponseEntity<Exchange> delete (@PathVariable("id") Long id) {
 
         // Deleta uma transação do BD
         exchangeRepository.deleteById(id);

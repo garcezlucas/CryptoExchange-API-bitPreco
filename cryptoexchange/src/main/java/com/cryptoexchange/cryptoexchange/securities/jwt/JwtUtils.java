@@ -16,17 +16,18 @@ import com.cryptoexchange.cryptoexchange.securities.services.UserDetailsImpl;
 
 import io.jsonwebtoken.*;
 
+
 @Component
 public class JwtUtils {
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-  @Value("${project.app.jwtSecret}")
+  @Value("${cryptoexchange.app.jwtSecret}")
   private String jwtSecret;
 
-  @Value("${project.app.jwtExpirationMs}")
+  @Value("${cryptoexchange.app.jwtExpirationMs}")
   private int jwtExpirationMs;
 
-  @Value("${project.app.jwtCookieName}")
+  @Value("${cryptoexchange.app.jwtCookieName}")
   private String jwtCookie;
 
   public String getJwtFromCookies(HttpServletRequest request) {
@@ -37,11 +38,15 @@ public class JwtUtils {
       return null;
     }
   }
+  
+  public String generateJwtToken(UserDetailsImpl userPrincipal) {
+    return generateTokenFromUsername(userPrincipal.getUsername());
+  }
 
-  public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
-    String jwt = generateTokenFromUsername(userPrincipal.getUsername());
-    ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
-    return cookie;
+  public String generateTokenFromUsername(String username) {
+    return Jwts.builder().setSubject(username).setIssuedAt(new Date())
+        .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
+        .compact();
   }
 
   public ResponseCookie getCleanJwtCookie() {
@@ -50,6 +55,7 @@ public class JwtUtils {
   }
 
   public String getUserNameFromJwtToken(String token) {
+
     return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
   }
 
@@ -71,13 +77,5 @@ public class JwtUtils {
 
     return false;
   }
-  
-  public String generateTokenFromUsername(String username) {   
-    return Jwts.builder()
-        .setSubject(username)
-        .setIssuedAt(new Date())
-        .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-        .signWith(SignatureAlgorithm.HS512, jwtSecret)
-        .compact();
-  }
+
 }

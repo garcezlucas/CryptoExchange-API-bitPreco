@@ -16,7 +16,7 @@ public class Coin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "coin_id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "coin_success")
     private String success;
@@ -56,7 +56,7 @@ public class Coin {
 
     }
 
-    public Coin( Integer id, String success, String market, Double last, Double high,Double low, Double vol, Double avg, Double var, Double buy, Double sell,String timestamp) {
+    public Coin( Long id, String success, String market, Double last, Double high,Double low, Double vol, Double avg, Double var, Double buy, Double sell,String timestamp) {
         this.id = id;
         this.success = success;
         this.market = market;
@@ -159,16 +159,13 @@ public class Coin {
         this.timestamp = timestamp;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Coin findCoinById(Integer id2) {
-        return null;
-    }
 
 }

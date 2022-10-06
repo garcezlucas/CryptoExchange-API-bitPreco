@@ -2,23 +2,18 @@ package com.cryptoexchange.cryptoexchange.payloads.responses;
 
 public class ExchangeResponse {
     
-    private Integer id;
-
+    private Long id;
     private String market;
-
     private String exchange;
-
     private Double value;
-
     private Double amount;
-
     private String date; 
 
     public ExchangeResponse() {
 
     }
 
-    public ExchangeResponse(Integer Id, String market, String exchange, Double value, Double amount, String date){
+    public ExchangeResponse(Long id, String market, String exchange, Double value, Double amount, String date){
         this.market = market;
         this.exchange = exchange;
         this.value = value;
@@ -27,11 +22,11 @@ public class ExchangeResponse {
 
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

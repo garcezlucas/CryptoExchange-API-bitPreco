@@ -8,11 +8,11 @@
 		<version>2.7.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.aula119</groupId>
-	<artifactId>viacep-api-client</artifactId>
+	<groupId>com.cryptoexchange</groupId>
+	<artifactId>cryptoexchange-API-client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>viacep-api-client</name>
-	<description>Demo project for Spring Boot</description>
+	<name>cryptoexchange-API-client</name>
+	<description>Projeto final Full Stack para o curso Transforma Tec</description>
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2021.0.3</spring-cloud.version>
@@ -55,12 +55,15 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-bootstrap</artifactId>
 		</dependency>
+
+	
+
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
+				<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
@@ -89,6 +92,12 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
+
+		
+
+		
+
+
 		
 	</dependencies>
 	<dependencyManagement>

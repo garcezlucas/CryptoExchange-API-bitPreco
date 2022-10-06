@@ -27,16 +27,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cryptoexchange.cryptoexchange.exceptions.TokenRefreshException;
 import com.cryptoexchange.cryptoexchange.models.ERole;
+import com.cryptoexchange.cryptoexchange.models.RefreshToken;
 import com.cryptoexchange.cryptoexchange.models.Role;
 import com.cryptoexchange.cryptoexchange.models.User;
 import com.cryptoexchange.cryptoexchange.payloads.requests.LoginRequest;
 import com.cryptoexchange.cryptoexchange.payloads.requests.SignupRequest;
+import com.cryptoexchange.cryptoexchange.payloads.requests.TokenRefreshRequest;
 import com.cryptoexchange.cryptoexchange.payloads.responses.MessageResponse;
+import com.cryptoexchange.cryptoexchange.payloads.responses.TokenRefreshResponse;
 import com.cryptoexchange.cryptoexchange.payloads.responses.UserInfoResponse;
 import com.cryptoexchange.cryptoexchange.repositories.RoleRepository;
 import com.cryptoexchange.cryptoexchange.repositories.UserRepository;
 import com.cryptoexchange.cryptoexchange.securities.jwt.JwtUtils;
+import com.cryptoexchange.cryptoexchange.securities.services.RefreshTokenService;
 import com.cryptoexchange.cryptoexchange.securities.services.UserDetailsImpl;
 
 import io.swagger.annotations.Api;
@@ -46,7 +51,7 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Api(value = "API de autenticação de usuário")
 public class AuthController{
     
@@ -65,33 +70,39 @@ public class AuthController{
     @Autowired
     JwtUtils jwtUtils;
 
+    @Autowired
+    RefreshTokenService refreshTokenService;
+
     @ApiOperation(value = "Login do usuário")
     //localhost:8080/api/auth/signin - POST
     @PostMapping("/signin")
 
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
-                        loginRequest.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(
 
+            new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+    
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal(); 
+        
+        String jwt = jwtUtils.generateJwtToken(userDetails);
 
         List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+            .map(item -> item.getAuthority())
+            .collect(Collectors.toList());
 
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(new UserInfoResponse(
-                        userDetails.getId(),
-                        userDetails.getUsername(),
-                        userDetails.getEmail(),
-                        roles));
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+    
+        return ResponseEntity.ok(new UserInfoResponse(jwt,
+                            refreshToken.getToken(),
+                            userDetails.getId(), 
+                            userDetails.getUsername(), 
+                            userDetails.getEmail(), 
+                            roles));
     }
+
 
     @ApiOperation(value = "Criando um novo usuário", consumes = "application/json", produces = "application/json")
     //localhost:8080/api/auth/signup - POST
@@ -107,63 +118,79 @@ public class AuthController{
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Erro: Usuário já existe"));
-        }
+            return ResponseEntity
+                .badRequest()
+                .body(new MessageResponse("Error: Username is already taken!"));
+            }
+        
+            if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity
+                .badRequest()
+                .body(new MessageResponse("Error: Email is already in use!"));
+            }
+        
+            // Create new user's account
+            User user = new User(signUpRequest.getUsername(), 
+                    signUpRequest.getEmail(),
+                    encoder.encode(signUpRequest.getPassword()));
+        
+            Set<String> strRoles = signUpRequest.getRole();
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Erro: Este email já foi registrado"));
-        }
-
-        // Criando uma nova conta de usuário
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-
-        Set<String> strRoles = signUpRequest.getRole();
-
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
+            Set<Role> roles = new HashSet<>();
+        
+            if (strRoles == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Erro: Role não encontrada"));
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
-        } else {
+            } else {
             strRoles.forEach(role -> {
                 switch (role) {
-
                     case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Erro: Role não encontrada"));
-                        roles.add(adminRole);
-                        break;
-
+                    Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    roles.add(adminRole);
+            
+                    break;
                     case "premium":
-                        Role premiumRole = roleRepository.findByName(ERole.ROLE_PREMIUM)
-                                .orElseThrow(() -> new RuntimeException("Erro: Role não encontrada"));
-                        roles.add(premiumRole);
-                        break;
-
-                    case "user":
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Erro: Role não encontrada"));
-                        roles.add(userRole);
-                        break;
+                    Role modRole = roleRepository.findByName(ERole.ROLE_PREMIUM)
+                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    roles.add(modRole);
+            
+                    break;
                     default:
-                        throw new RuntimeException("Erro: Role não encontrada");
-                }
+                    Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    roles.add(userRole);
+                    }
             });
+            }
+        
+            user.setRoles(roles);
+            
+            userRepository.save(user);
+        
+            return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
         }
 
-        user.setRoles(roles);
+    @PostMapping("/refreshtoken")
+    public ResponseEntity<?> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {
+        String requestRefreshToken = request.getRefreshToken();
 
-        // salvando conta no BD
-        userRepository.save(user);
+        return refreshTokenService.findByToken(requestRefreshToken)
+            .map(refreshTokenService::verifyExpiration)
+            .map(RefreshToken::getUser)
+            .map(user -> {
+                String token = jwtUtils.generateTokenFromUsername(user.getUsername());
+                return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
+            })
+            .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
+                "Refresh token is not in database!"));
+        }    
 
-        return ResponseEntity.ok(new MessageResponse("Usuário registrado com sucesso"));
-    }
 
     @ApiOperation(value = "Logout do usuário")
     //localhost:8080/api/auth/signout - POST
+    
     @PostMapping("/signout")
 
     public ResponseEntity<?> logoutUser() {
@@ -171,6 +198,14 @@ public class AuthController{
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(new MessageResponse("Sessão encerrada"));
     }
+
+    /*@PostMapping("/signout")
+    public ResponseEntity<?> logoutUser() {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = userDetails.getId();
+        refreshTokenService.deleteByUserId(userId);
+        return ResponseEntity.ok(new MessageResponse("Log out successful!"));
+    }*/
 
     @ApiOperation(value = "Buscando usuários por nome", produces = "application/json")
     //localhost:8080/api/auth/users/?username=bob - GET
@@ -202,17 +237,21 @@ public class AuthController{
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
     
-    public ResponseEntity<User> getById(@PathVariable("id") long id){
+    public ResponseEntity<Optional<User>> getById(@PathVariable("id") Long id){
 
-        User _user = userRepository.findById(id);
+        Optional<User> _user = userRepository.findById(id);
 
         if (_user == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);   
         }
 
-        return new ResponseEntity<User>(_user, HttpStatus.OK);
+        return new ResponseEntity<Optional<User>>(_user, HttpStatus.OK);
 
     }
 
 
+
 }
+
+
+

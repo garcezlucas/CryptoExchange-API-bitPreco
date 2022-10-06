@@ -3,6 +3,7 @@ package com.cryptoexchange.cryptoexchange.controllers;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -83,16 +84,16 @@ public class CoinController {
     @ApiOperation(value = "Busca uma moeda através de seu Id")
     //localhost:8080/api/coins/list/1 - GET
     @GetMapping(value = "/coins/list/{id}")
-    public ResponseEntity <List<Coin>> listCoinsById(@PathVariable("id") Integer id){
+    public ResponseEntity <Optional<Coin>> listCoinsById(@PathVariable("id") Long id){
 
         // Retorna uma moeda definida pelo Id
-        return new ResponseEntity<List<Coin>>(coinRepository.findById(id), HttpStatus.OK);
+        return new ResponseEntity<Optional<Coin>>(coinRepository.findById(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Atualiza as informações de uma moeda")
     //localhost:8080/api/auth/coins/update/1 - PUT
     @PutMapping("/coins/update/{id}")
-    public ResponseEntity<Coin> update (@PathVariable("id") Integer id, @RequestBody Coin coin){
+    public ResponseEntity<Coin> update (@PathVariable("id") Long id, @RequestBody Coin coin){
 
         // Busca as informações da moeda no BD
         Coin _coin = coinRepository.getCoinById(id);
@@ -116,7 +117,7 @@ public class CoinController {
     @ApiOperation(value = "Deleta uma moeda através de seu Id")
     //localhost:8080/api/auth/coins/delete/1 - DELETE
     @DeleteMapping(value = "/coins/delete/{id}")
-    public ResponseEntity<Coin> delete (@PathVariable("id") Integer id) {
+    public ResponseEntity<Coin> delete (@PathVariable("id") Long id) {
 
         // Deleta uma moeda do BD através do ID
         coinRepository.deleteById(id);

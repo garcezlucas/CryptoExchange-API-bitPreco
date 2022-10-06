@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cryptoexchange.cryptoexchange.models.User;
 import com.cryptoexchange.cryptoexchange.repositories.UserRepository;
 
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
   @Autowired

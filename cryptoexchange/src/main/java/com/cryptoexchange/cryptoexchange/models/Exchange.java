@@ -16,7 +16,7 @@ public class Exchange {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "exchange_id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "exchange_market")
     private String market;
@@ -37,7 +37,7 @@ public class Exchange {
 
     }
 
-    public Exchange(Integer Id, String market, String exchange, Double value, Double amount, String date){
+    public Exchange(Long id, String market, String exchange, Double value, Double amount, String date){
         this.market = market;
         this.exchange = exchange;
         this.value = value;
@@ -46,11 +46,11 @@ public class Exchange {
 
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

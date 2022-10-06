@@ -2,7 +2,7 @@ package com.cryptoexchange.cryptoexchange.payloads.responses;
 
 public class CoinResponse {
         
-    private Integer id;
+    private Long id;
     private String success;
     private String market;
     private Double last;
@@ -20,7 +20,7 @@ public class CoinResponse {
         
     }
 
-    public CoinResponse( Integer id, String success, String market, Double last, Double high,Double low, Double vol, Double avg, Double var, Double buy, Double sell,String timestamp) {
+    public CoinResponse( Long id, String success, String market, Double last, Double high,Double low, Double vol, Double avg, Double var, Double buy, Double sell,String timestamp) {
         this.id = id;
         this.success = success;
         this.market = market;
@@ -123,11 +123,11 @@ public class CoinResponse {
         this.timestamp = timestamp;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

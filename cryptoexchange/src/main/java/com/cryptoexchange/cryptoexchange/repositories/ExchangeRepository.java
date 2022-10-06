@@ -15,10 +15,10 @@ public interface ExchangeRepository extends JpaRepository<Exchange, Long>{
 
     List<Exchange> findByExchange(String exchange);
 
-    Exchange getExchangeById(Integer id);
+    Exchange getExchangeById(Long id);
 
     @Transactional
-    void deleteById(Integer id);
+    void deleteById(Long id);
 
     @Transactional
     void save(ExchangeResponse exchange);
