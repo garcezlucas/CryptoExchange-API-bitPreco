@@ -15,8 +15,8 @@ public class TokenRefreshResponse {
         return accessToken;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setAccessToken(String token) {
+        this.accessToken = token;
     }
 
     public String getRefreshToken() {

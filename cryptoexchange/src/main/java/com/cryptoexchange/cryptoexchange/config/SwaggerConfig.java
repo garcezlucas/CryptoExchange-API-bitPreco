@@ -31,9 +31,12 @@ public class SwaggerConfig {
                     .description("API para transação de criptomoedas com o valor atualizado da criptomoeda")
                     .version("1.0.0")
                     .license("Apache License Version 2.0")
-                    .contact(new Contact("Lucas", "https://github.com/garcezlucas", "garcezlucas.silva@gmail.com"))
+                    .contact(new Contact("Lucas Garcez", "https://github.com/garcezlucas", "garcezlucas.silva@gmail.com"))
                     .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
                     .build();
     }
 
 }
+
+
+

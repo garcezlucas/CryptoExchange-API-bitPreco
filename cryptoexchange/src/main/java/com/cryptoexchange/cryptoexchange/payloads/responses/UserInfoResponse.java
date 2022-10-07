@@ -2,16 +2,17 @@ package com.cryptoexchange.cryptoexchange.payloads.responses;
 
 import java.util.List;
 
+
 public class UserInfoResponse {
 	private String token;
-	private String cookie;
+	private String type = "Bearer";
 	private String refreshToken;
 	private Long id;
 	private String username;
 	private String email;
 	private List<String> roles;
 
-	public UserInfoResponse(String accessToken, String refreshToken, Long id, String username, String email, List<String> roles) {
+	public UserInfoResponse( String accessToken, String refreshToken, Long id, String username, String email, List<String> roles) {
 		this.token = accessToken;
 		this.refreshToken = refreshToken;
 		this.id = id;
@@ -20,21 +21,7 @@ public class UserInfoResponse {
 		this.roles = roles;
 	}
 
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	public String getCookie() {
-		return cookie;
-	}
-
-	public void setCookie(String cookie) {
-		this.cookie = cookie;
-	}
+	
 
 	public String getRefreshToken() {
 		return refreshToken;
@@ -74,6 +61,26 @@ public class UserInfoResponse {
 
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
+
+	public String getToken() {
+		return token;
+	}
+
+
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 }

@@ -20,6 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,6 +51,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -76,7 +79,10 @@ public class AuthController{
     @ApiOperation(value = "Login do usuário")
     //localhost:8080/api/auth/signin - POST
     @PostMapping("/signin")
-
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -87,7 +93,7 @@ public class AuthController{
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal(); 
         
-        String jwt = jwtUtils.generateJwtToken(userDetails);
+        String jwtCookie = jwtUtils.generateJwtToken(userDetails);
 
         List<String> roles = userDetails.getAuthorities().stream()
             .map(item -> item.getAuthority())
@@ -95,7 +101,8 @@ public class AuthController{
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
     
-        return ResponseEntity.ok(new UserInfoResponse(jwt,
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                        .body(new UserInfoResponse(jwtCookie,
                             refreshToken.getToken(),
                             userDetails.getId(), 
                             userDetails.getUsername(), 
@@ -107,151 +114,208 @@ public class AuthController{
     @ApiOperation(value = "Criando um novo usuário", consumes = "application/json", produces = "application/json")
     //localhost:8080/api/auth/signup - POST
     @PostMapping("/signup")
-
-    //Documentação do Swagger
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 201, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
-
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+
             return ResponseEntity
                 .badRequest()
-                .body(new MessageResponse("Error: Username is already taken!"));
+                .body(new MessageResponse("Error: Usuário já existe!"));
             }
-        
             if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+
             return ResponseEntity
                 .badRequest()
-                .body(new MessageResponse("Error: Email is already in use!"));
+                .body(new MessageResponse("Error: Email já está em uso!"));
             }
-        
-            // Create new user's account
+
+            // Cria um novo usuário com requisição de nome de usuário, email, senha e permissão
             User user = new User(signUpRequest.getUsername(), 
                     signUpRequest.getEmail(),
                     encoder.encode(signUpRequest.getPassword()));
-        
+            // Pega a Role inserida pelo usuário
             Set<String> strRoles = signUpRequest.getRole();
-
+            // 
             Set<Role> roles = new HashSet<>();
-        
+            // Verifica se o campo Role do input é nulo
             if (strRoles == null) {
+            //Se o input for nulo é atribuido a ROLE_USER para o usuário
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                // Lança excessão informando que a Role não foi encontrada
+                .orElseThrow(() -> new RuntimeException("Error: Role não encontrada."));
             roles.add(userRole);
             } else {
             strRoles.forEach(role -> {
                 switch (role) {
+                    //Se o input for admin é atribuido a ROLE_ADMIN para o usuário
                     case "admin":
                     Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        // Lança excessão informando que a Role não foi encontrada
+                        .orElseThrow(() -> new RuntimeException("Error: Role não encontrada."));
                     roles.add(adminRole);
-            
+
+                    //Se o input for premium é atribuido a ROLE_PREMIUM para o usuário
                     break;
                     case "premium":
                     Role modRole = roleRepository.findByName(ERole.ROLE_PREMIUM)
-                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        // Lança excessão informando que a Role não foi encontrada
+                        .orElseThrow(() -> new RuntimeException("Error: Role não encontrada."));
                     roles.add(modRole);
-            
+
+                    // Por default é atribuido a ROLE_USER para o usuário
                     break;
                     default:
                     Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        // Lança excessão informando que a Role não foi encontrada
+                        .orElseThrow(() -> new RuntimeException("Error: Role não encontrada."));
                     roles.add(userRole);
                     }
             });
             }
-        
+            // Adiciona uma Role ao usuário
             user.setRoles(roles);
-            
+            // Salva os dados de user no BD
             userRepository.save(user);
-        
-            return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+            // Retorna uma mensagem de usuário registrado
+            return ResponseEntity.ok(new MessageResponse("Usuário registrado com sucesso!"));
         }
 
     @PostMapping("/refreshtoken")
+    //localhost:8080/api/auth/refreshtoken - POST
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     public ResponseEntity<?> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {
-        String requestRefreshToken = request.getRefreshToken();
 
+        // Chama a função getRefreshToken para pegar o RefreshToken
+        String requestRefreshToken = request.getRefreshToken();
+        // Retorna uma resposta com as informações do Refresh Token
         return refreshTokenService.findByToken(requestRefreshToken)
             .map(refreshTokenService::verifyExpiration)
             .map(RefreshToken::getUser)
             .map(user -> {
+                // Chama a função generateTokenFromUsername para gerar um novo token atraves do nome de usuário
                 String token = jwtUtils.generateTokenFromUsername(user.getUsername());
+                // Retorna as informações do Token gerado
                 return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
             })
+            // Retorna uma mensagem de Erro se o token não for encontrado no BD
             .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
-                "Refresh token is not in database!"));
+                "Refresh token não está no Banco de Dados!"));
         }    
 
 
     @ApiOperation(value = "Logout do usuário")
     //localhost:8080/api/auth/signout - POST
-    
     @PostMapping("/signout")
-
-    public ResponseEntity<?> logoutUser() {
-        ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(new MessageResponse("Sessão encerrada"));
-    }
-
-    /*@PostMapping("/signout")
-    public ResponseEntity<?> logoutUser() {
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = userDetails.getId();
-        refreshTokenService.deleteByUserId(userId);
-        return ResponseEntity.ok(new MessageResponse("Log out successful!"));
-    }*/
-
-    @ApiOperation(value = "Buscando usuários por nome", produces = "application/json")
-    //localhost:8080/api/auth/users/?username=bob - GET
-    @GetMapping("/users")
-
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    
+    public ResponseEntity<?> logoutUser() {
+
+        // Chama a funçaõ getCleanJwtCookie para limpar o cookie
+        ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+        //Retorna uma mensagem de Sessão Encerrada
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(new MessageResponse("Sessão encerrada"));
+    }
+
+    @ApiOperation(value = "Buscando usuários por nome", produces = "application/json")
+    //localhost:8080/api/auth/users/?username=bob - GET
+    @GetMapping("/users/")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     public ResponseEntity<Optional<User>> findByName(@RequestParam String username){
 
+        // Busca o usuário no BD através do nome de usuário
         Optional<User> _users = userRepository.findByUsername(username);
-
+        //Verifica se o usuário é nulo
         if(_users.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            // Retorna resposta de usuário não encontrado
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
+        // Retorna uma lista com as informações do usuário pesquisado
         return new ResponseEntity<Optional<User>>(_users, HttpStatus.OK);
-
     }
 
     @ApiOperation(value = "Buscando um usuário por id", produces = "application/json")
     //localhost:8080/api/auth/users/1 - GET
     @GetMapping("users/{id}")    
-
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    
     public ResponseEntity<Optional<User>> getById(@PathVariable("id") Long id){
 
+        // Busca o usuário no BD atravpes do Id
         Optional<User> _user = userRepository.findById(id);
-
+        // Verifica se o usuário é nulo
         if (_user == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);   
+            // Retorna resposta de usuário não encontrado
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);   
         }
-
+        // Retorna uma lista com as informações do usuário pesquisado
         return new ResponseEntity<Optional<User>>(_user, HttpStatus.OK);
-
     }
 
+    @PutMapping("users/update/{id}")
+    //localhost:8080/api/auth/users/update/{id} - PUT
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    public ResponseEntity<User> updateById(@PathVariable("id") Long id, @RequestBody User user) {
+        
+        // Busca o usuário no BD atravpes do Id
+        User _user = userRepository.getUserById(id);
+        // Verifica se o usuário é nulo
+        if (_user == null) {
+            // Retorna resposta de usuário não encontrado
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);   
+        }else {
+            // Realiza o update das informações da moeda
+            _user.setUsername(user.getUsername());
+            _user.setEmail(user.getEmail());
+            _user.setPassword(user.getPassword());
 
+            // Retorna as novas informações da moeda com status OK
+            return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
+        }
+    }
+
+    @DeleteMapping(value = "/users/delete/{id}")
+    //localhost:8080/api/auth/users/delete/{Id} - DELETE
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    public ResponseEntity<?> delete (@PathVariable("id") Long id) {
+
+        // Deleta uma moeda do BD através do ID
+        userRepository.deleteById(id);
+        //Verifica se o id é nulo
+        if (id == null) {
+            // Retorna resposta de usuário não encontrado
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }  
+        // Retorna resposta de usuário deletado
+        return ResponseEntity.ok(new MessageResponse("Usuário deletado com sucesso!"));
+        
+    }
 
 }
+
+
+
 
 
 

@@ -9,10 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.cryptoexchange.cryptoexchange.repositories.PreRemove;
+
 // Cria a tabela roles no BD
 @Entity
+@PreRemove
 @Table(name = "roles")
 public class Role {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,8 +25,7 @@ public class Role {
     @Column(length = 25)
     private ERole name;
 
-    public Role() {
-        
+    public Role(){
     }
 
     public Role(ERole name) {

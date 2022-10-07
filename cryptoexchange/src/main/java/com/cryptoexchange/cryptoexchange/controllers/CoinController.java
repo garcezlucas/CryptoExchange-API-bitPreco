@@ -19,10 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cryptoexchange.cryptoexchange.interfaces.CoinInterface;
 import com.cryptoexchange.cryptoexchange.models.Coin;
 import com.cryptoexchange.cryptoexchange.payloads.responses.CoinResponse;
+import com.cryptoexchange.cryptoexchange.payloads.responses.MessageResponse;
 import com.cryptoexchange.cryptoexchange.repositories.CoinRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 
 @RestController
@@ -39,6 +42,10 @@ public class CoinController {
     @ApiOperation(value="Cria uma nova moeda")
     //localhost:8080/api/auth/btc-brl/ticket - GET
     @GetMapping("/{market}/ticker")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     public ResponseEntity<CoinResponse> getByMarket(@PathVariable String market) {
 
         //Buscando resultado da API do ViaCEP
@@ -75,6 +82,10 @@ public class CoinController {
     @ApiOperation(value = "Lista todas as moedas")
     //localhost:8080/api/auth/coins?list/all - GET
     @GetMapping(value = "/coins/list/all")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     public ResponseEntity<List<Coin>> listCoins(){
         
         // Retorna uma lista com todas as moedas
@@ -84,15 +95,28 @@ public class CoinController {
     @ApiOperation(value = "Busca uma moeda através de seu Id")
     //localhost:8080/api/coins/list/1 - GET
     @GetMapping(value = "/coins/list/{id}")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     public ResponseEntity <Optional<Coin>> listCoinsById(@PathVariable("id") Long id){
 
-        // Retorna uma moeda definida pelo Id
-        return new ResponseEntity<Optional<Coin>>(coinRepository.findById(id), HttpStatus.OK);
+        if (id == null) {
+
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);   
+        }else {
+            // Retorna uma moeda definida pelo Id
+            return new ResponseEntity<Optional<Coin>>(coinRepository.findById(id), HttpStatus.OK);
+        }
     }
 
     @ApiOperation(value = "Atualiza as informações de uma moeda")
     //localhost:8080/api/auth/coins/update/1 - PUT
     @PutMapping("/coins/update/{id}")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     public ResponseEntity<Coin> update (@PathVariable("id") Long id, @RequestBody Coin coin){
 
         // Busca as informações da moeda no BD
@@ -117,13 +141,20 @@ public class CoinController {
     @ApiOperation(value = "Deleta uma moeda através de seu Id")
     //localhost:8080/api/auth/coins/delete/1 - DELETE
     @DeleteMapping(value = "/coins/delete/{id}")
-    public ResponseEntity<Coin> delete (@PathVariable("id") Long id) {
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    public ResponseEntity<?> delete (@PathVariable("id") Long id) {
 
         // Deleta uma moeda do BD através do ID
         coinRepository.deleteById(id);
-        
-        // Retorna nenhuma informação ao cliente
-        return ResponseEntity.noContent().build();
+        if (id == null) {
+
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);   
+        }
+            // Retorna nenhuma informação ao cliente
+            return ResponseEntity.ok(new MessageResponse("Coin deletada com sucesso!"));
     }
 
 }
