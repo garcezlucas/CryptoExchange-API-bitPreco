@@ -19,6 +19,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.cryptoexchange.cryptoexchange.securities.services.UserDetailsServiceImpl;
 
+
+// Implementa um filtro de autenticação do token JWT
 public class AuthTokenFilter extends OncePerRequestFilter{
     @Autowired
     private JwtUtils jwtUtils;
@@ -45,7 +47,7 @@ public class AuthTokenFilter extends OncePerRequestFilter{
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+            logger.error("Não pode setar a autenticação do usuário: {}", e);
         }
         filterChain.doFilter(request, response);
     }

@@ -1,5 +1,7 @@
 package com.cryptoexchange.cryptoexchange.payloads.responses;
 
+
+// // Dados que devem ser retornados pelo usuário
 public class CoinResponse {
         
     private Long id;

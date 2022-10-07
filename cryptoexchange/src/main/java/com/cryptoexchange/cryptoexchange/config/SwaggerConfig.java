@@ -11,6 +11,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 
+// Configurações para a documentação Swagger
 @Configuration
 public class SwaggerConfig {
     

@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.validation.constraints.*;
 
 
+// Dados que devem ser inseridos pelo usuário em um pedido de cadastro
 public class SignupRequest {
     @NotBlank
     @Size(min = 3, max = 25)

@@ -3,6 +3,7 @@ package com.cryptoexchange.cryptoexchange.payloads.responses;
 import java.util.List;
 
 
+// Dados que devem ser retornados pelo usuário
 public class UserInfoResponse {
 	private String token;
 	private String type = "Bearer";
@@ -20,8 +21,6 @@ public class UserInfoResponse {
 		this.email = email;
 		this.roles = roles;
 	}
-
-	
 
 	public String getRefreshToken() {
 		return refreshToken;
@@ -71,13 +70,9 @@ public class UserInfoResponse {
 		this.type = type;
 	}
 
-
-
 	public String getToken() {
 		return token;
 	}
-
-
 
 	public void setToken(String token) {
 		this.token = token;

@@ -25,30 +25,37 @@ public class RefreshTokenService {
     @Autowired
     private UserRepository userRepository;
 
+    // Busca o token
     public Optional<RefreshToken> findByToken(String token) {
+        // Retorna o token buscado
         return refreshTokenRepository.findByToken(token);
     }
-
+    // Cria o refreshToken através do Id do usuário
     public RefreshToken createRefreshToken(Long userId) {
+        // cria um novo refreshToken
         RefreshToken refreshToken = new RefreshToken();
-
+        // Adicona o usuário, data de expiração e token ao refreshToken
         refreshToken.setUser(userRepository.findById(userId).get());
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
         refreshToken.setToken(UUID.randomUUID().toString());
-
+        // Salva o refreshToken no BD
         refreshToken = refreshTokenRepository.save(refreshToken);
+        //Retorna o refreshToken
         return refreshToken;
     }
-
+    // Verifica a expiração do refreshToken
     public RefreshToken verifyExpiration(RefreshToken token) {
+        //Verifca se o token está expirado
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
+        // Deleta o token do refreshToken 
         refreshTokenRepository.delete(token);
-        throw new TokenRefreshException(token.getToken(), "Refresh token was expired. Please make a new signin request");
+        // Lança uma mensagem de erro pedindo um novo sigin pois o refreshToken está expirado
+        throw new TokenRefreshException(token.getToken(), "Refresh token está expirado. Por favor, faça um novo Login");
         }
-
+        // Retorna o token
         return token;
     }
-
+    // Deleta o refreshToken do BD através do Id de usuário
     @Transactional
     public int deleteByUserId(Long userId) {
         return refreshTokenRepository.deleteByUser(userRepository.findById(userId).get());

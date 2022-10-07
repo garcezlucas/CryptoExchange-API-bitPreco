@@ -11,20 +11,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 
-
+// Cria a tabela refreshtoken
 @Entity(name = "refreshtoken")
 public class RefreshToken {
+    //  Cria a coluna que armazena o valor do Id do refreshtoken com geração automatica
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    //  Realiza a realação entre o id do refreshtoken e o id do usuário
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-
+    //  Cria a coluna que armazena o token
     @Column(nullable = false, unique = true)
     private String token;
-
+    //  Cria a coluna que armazena a data de expiração do token
     @Column(nullable = false)
     private Instant expiryDate;
 

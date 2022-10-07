@@ -12,24 +12,24 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "exchange")
 public class Exchange {
-    
+    //  Cria a coluna que armazena o valor do Id da transação com geração automática
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "exchange_id")
     private Long id;
-
+    //  Cria a coluna que armazena a criptomoeda da transação
     @Column(name = "exchange_market")
     private String market;
-
+    //  Cria a coluna que armazena o tipo de transação
     @Column(name = "exchange_exchange")
     private String exchange;
-
+    //  Cria a coluna que armazena o valor da transação com
     @Column(name = "exchange_value")
     private Double value;
-
+    //  Cria a coluna que armazena a quantidade de criptomoedas negociadas
     @Column(name = "exchange_amount")
     private Double amount;
-
+    //  Cria a coluna que armazena a data da transação
     @Column(name = "exchange_date")
     private String date; 
 

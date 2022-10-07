@@ -85,22 +85,23 @@ public class AuthController{
     })
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
+        // Chama o AuthenticationManager do Spring Framework Authentication
         Authentication authentication = authenticationManager.authenticate(
-
+            // Pega o nome de usuário e a senha usados no pedido de login para autenticação
             new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-    
+        // Realiza a autenticação do usuário
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
+        // Pega as informações do usuário autenticado
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal(); 
-        
+        // Chama a função generateJwtToken para gerar um cookie Jwt
         String jwtCookie = jwtUtils.generateJwtToken(userDetails);
-
+        // Cria uma lista com a(s) Role atribuidas ao usuário
         List<String> roles = userDetails.getAuthorities().stream()
             .map(item -> item.getAuthority())
             .collect(Collectors.toList());
-
+        // Chama a função createRefreshToken para gerar um novo refreshToken
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-    
+        //Retorna uma resposta com os dados do usuário
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                         .body(new UserInfoResponse(jwtCookie,
                             refreshToken.getToken(),
@@ -121,14 +122,16 @@ public class AuthController{
     })
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 
+        // Verifica o nome de usuário no BD
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-
+            // Se o nome já existir retorna um erro de usuário existente
             return ResponseEntity
                 .badRequest()
                 .body(new MessageResponse("Error: Usuário já existe!"));
             }
+            // Verifica o email no BD
             if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-
+            // Se o email já existir retorna um erro de email existente
             return ResponseEntity
                 .badRequest()
                 .body(new MessageResponse("Error: Email já está em uso!"));

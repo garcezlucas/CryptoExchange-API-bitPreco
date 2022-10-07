@@ -10,12 +10,15 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.cryptoexchange.cryptoexchange.exceptions.TokenRefreshException;
 
+
+// Trata as exceções do refreshToken retornando mensagem de erro
 @RestControllerAdvice
 public class TokenControllerAdvice {
 
     @ExceptionHandler(value = TokenRefreshException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorMessage handleTokenRefreshException(TokenRefreshException ex, WebRequest request) {
+        
         return new ErrorMessage(
             HttpStatus.FORBIDDEN.value(),
             new Date(),

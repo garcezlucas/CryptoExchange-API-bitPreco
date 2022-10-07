@@ -30,51 +30,69 @@ public class JwtUtils {
     @Value("${cryptoexchange.app.jwtCookieName}")
     private String jwtCookie;
 
-    public String getJwtFromCookies(HttpServletRequest request) {
-        Cookie userPrincipal = WebUtils.getCookie(request, jwtCookie);
-        if (userPrincipal != null) {
-            return userPrincipal.getValue();
-        } else {
-            return null;
-        }
-    }
-
+    // Busca os dados do usuário para geração do token
     public String generateJwtToken(UserDetailsImpl userPrincipal) {
+        // Retorna o nome de usuário para geração do token
         return generateTokenFromUsername(userPrincipal.getUsername());
     }
-    
+    // Gera o token para o usuário através do nome de usuário
     public String generateTokenFromUsername(String username) {
+        // Retorna o token gerado para o usuário
         return Jwts.builder().setSubject(username).setIssuedAt(new Date())
             .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
             .compact();
-    }
-    
-    public ResponseCookie getCleanJwtCookie() {
-        ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/api").build();
-    return cookie;
-    }
-    
+    }    
+    // Pega o nome de usuário através do token
     public String getUserNameFromJwtToken(String token) {
+        // Retorna  
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
-    
+
+    // Obtem o token Jwt do usuário
+    public String getJwtFromCookies(HttpServletRequest request) {
+        Cookie userPrincipal = WebUtils.getCookie(request, jwtCookie);
+        // Verifica se o usuário é diferente de nulo
+        if (userPrincipal != null) {
+            // REtorna o valor do token para o usuário principal
+            return userPrincipal.getValue();
+        } else {
+            // Retorna nulo em caso do usuário ser nulo
+            return null;
+        }
+    }
+    // Realiza a validação boolean do token
     public boolean validateJwtToken(String authToken) {
+        // Verifica se as reivindicações esão corretas
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            // Retorna que os reivindicações são validas
             return true;
+        // Retorna uma mensagem de erro de assinatura
         } catch (SignatureException e) {
-            logger.error("Invalid JWT signature: {}", e.getMessage());
+            logger.error("Assinatura JWT Inválida: {}", e.getMessage());
+        // Retorna uma mensagem de erro de token invalido
         } catch (MalformedJwtException e) {
-            logger.error("Invalid JWT token: {}", e.getMessage());
+            logger.error("Token JWT Inválido: {}", e.getMessage());
+        // Retorna uma mensagem de erro de token expirado
         } catch (ExpiredJwtException e) {
-            logger.error("JWT token is expired: {}", e.getMessage());
+            logger.error("Token JWT está expirado: {}", e.getMessage());
+        // Retorna uma mensagem de erro de token não suportado
         } catch (UnsupportedJwtException e) {
-            logger.error("JWT token is unsupported: {}", e.getMessage());
+            logger.error("Token JWT não é suportado : {}", e.getMessage());
+        // Retorna uma mensagem de erro de reivindicações vazias
         } catch (IllegalArgumentException e) {
-            logger.error("JWT claims string is empty: {}", e.getMessage());
+            logger.error("As reivindicações estão vazias: {}", e.getMessage());
         }
-    
+        // Retorna falso se as reivindicações estão erradas 
         return false;
     }
+    // Realiza a limpeza do cookies com o token JWT 
+    public ResponseCookie getCleanJwtCookie() {
+        // Seta um valor nulo para o cookie
+        ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/api").build();
+    //Retorna o cookie com valor nulo
+    return cookie;
+    }
+
     
     }

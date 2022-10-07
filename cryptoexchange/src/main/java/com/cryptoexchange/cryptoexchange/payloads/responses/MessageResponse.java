@@ -1,5 +1,7 @@
 package com.cryptoexchange.cryptoexchange.payloads.responses;
 
+
+// Mensagem de resposta
 public class MessageResponse {
 	private String message;
 

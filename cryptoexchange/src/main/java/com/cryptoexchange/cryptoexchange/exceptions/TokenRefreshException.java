@@ -3,6 +3,8 @@ package com.cryptoexchange.cryptoexchange.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+
+// Responsavel por resgatar as exeções lançadas pela JVM
 @ResponseStatus(HttpStatus.FORBIDDEN)
 public class TokenRefreshException extends RuntimeException {
 

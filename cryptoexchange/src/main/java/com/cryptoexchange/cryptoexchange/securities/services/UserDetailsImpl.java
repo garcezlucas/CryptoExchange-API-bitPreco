@@ -13,6 +13,7 @@ import com.cryptoexchange.cryptoexchange.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
+// Dados que devem ser retornados pelo usuário
 public class UserDetailsImpl implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
@@ -26,7 +27,7 @@ public class UserDetailsImpl implements UserDetails {
 	private String password;
 
 	private Collection<? extends GrantedAuthority> authorities;
-
+	// Indica as informações que serão implementadas ao usuário
 	public UserDetailsImpl(Long id, String username, String email, String password,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
@@ -35,7 +36,7 @@ public class UserDetailsImpl implements UserDetails {
 		this.password = password;
 		this.authorities = authorities;
 	}
-
+	// Implementa uma lista com os novos detalhes do usuário
 	public static UserDetailsImpl build(User user) {
 		List<GrantedAuthority> authorities = user.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getName().name()))

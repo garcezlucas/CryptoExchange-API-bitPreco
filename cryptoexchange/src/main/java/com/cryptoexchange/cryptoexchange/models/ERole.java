@@ -1,7 +1,7 @@
 package com.cryptoexchange.cryptoexchange.models;
 
 
-// Lista estática
+// Lista estática da Roles 
 public enum ERole {
     ROLE_USER,
     ROLE_PREMIUM,

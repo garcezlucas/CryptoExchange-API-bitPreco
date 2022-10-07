@@ -12,42 +12,42 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "coin")
 public class Coin {
-    
+    // Cria a coluna que armazena o id da criptomoeda com geração automatica
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "coin_id")
     private Long id;
-
+    // Cria a coluna qua armazena se a busca obtive sucesso ou não
     @Column(name = "coin_success")
     private String success;
-
+    // Cria a coluna que armazena o nome da criptomoeda
     @Column(name = "coin_market")
     private String market;
-
+    // Cria a coluna    ue armazena o ultimo valor de transação da criptomoeda
     @Column(name = "coin_last")
     private Double last;
-
+    // Cria a coluna que armazena o valor mais alto de transação da criptomoeda
     @Column(name = "coin_high")
     private Double high;
-
+    // Cria a coluna que armazena o valor mais baixo de transação  criptomoeda
     @Column(name = "coin_low")
     private Double low;  
-
+    // Cria a coluna que armazena o valume de transação da criptomoeda no dia
     @Column(name = "coin_vol")
     private Double vol;
-
+    // Cria a coluna que armazena o valor medio das transações da criptomoeda no dia
     @Column(name = "coin_avg")
     private Double avg;
-
+    // Cria a coluna que armazena o valor da variação do preço da criptomoeda (diferença entre o valor mais alto e o mais baixo)
     @Column(name = "coin_var")
     private Double var;
-
+    // Cria a coluna que armazena o valor de compra da criptomoeda
     @Column(name = "coin_buy")
     private Double buy;
-
+    // Cria a coluna que armazena o valor de venda da criptomoeda
     @Column(name = "coin_sell")
     private Double sell;
-
+    // Cria a coluna que armazena a informação do horário de obtenção dos dados
     @Column(name = "coin_timestamp")
     private String timestamp;
 

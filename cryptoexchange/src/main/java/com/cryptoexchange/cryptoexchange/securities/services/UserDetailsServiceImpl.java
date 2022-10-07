@@ -15,13 +15,15 @@ import com.cryptoexchange.cryptoexchange.repositories.UserRepository;
 public class UserDetailsServiceImpl implements UserDetailsService{
     @Autowired
     UserRepository userRepository;
-
+    // Busca o usuário no BD
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // Busca o usuario através de seu nome de usuário
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-
+                // Retorna um erro de usuário não encontrado
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com o nome de usuário: " + username));
+        // Retorna o usuário se encontrado
         return UserDetailsImpl.build(user);
     }
 }

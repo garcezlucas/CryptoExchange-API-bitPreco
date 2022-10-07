@@ -11,16 +11,17 @@ import javax.persistence.Table;
 
 import com.cryptoexchange.cryptoexchange.repositories.PreRemove;
 
+
 // Cria a tabela roles no BD
 @Entity
 @PreRemove
 @Table(name = "roles")
 public class Role {
-    
+    //  Cria a coluna que armazena o valor do Id da role com geração automatica
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    //  Cria a coluna que armazena os nomes das Roles 
     @Enumerated(EnumType.STRING)
     @Column(length = 25)
     private ERole name;

@@ -2,6 +2,8 @@ package com.cryptoexchange.cryptoexchange.payloads.requests;
 
 import javax.validation.constraints.NotBlank;
 
+
+// Dados que devem ser inseridos pelo usuário em um request de Login
 public class LoginRequest {
 	@NotBlank
 	private String username;

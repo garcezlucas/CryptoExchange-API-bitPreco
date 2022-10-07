@@ -48,12 +48,12 @@ public class CoinController {
     })
     public ResponseEntity<CoinResponse> getByMarket(@PathVariable String market) {
 
-        //Buscando resultado da API do ViaCEP
+        //Buscando resultado da API do bitPreco
         CoinResponse response = coinInterface.getCoinByCoin(market);
 
-        // Cria uma nova moeda coin
+        // Verifica se a busca da moeda retornou um valor diferente de nulo
         if(response.getMarket() != null){
-
+            // Cria uma nova moeda coin
             Coin coin = new Coin(
                 response.getId(),
                 response.getSuccess(),
@@ -101,8 +101,9 @@ public class CoinController {
     })
     public ResponseEntity <Optional<Coin>> listCoinsById(@PathVariable("id") Long id){
 
+        // verifica se o id é nulo
         if (id == null) {
-
+            // Retorna uma mensagem de moeda não encontrada se o id for nulo
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);   
         }else {
             // Retorna uma moeda definida pelo Id
@@ -110,7 +111,7 @@ public class CoinController {
         }
     }
 
-    @ApiOperation(value = "Atualiza as informações de uma moeda")
+    @ApiOperation(value = "Atualiza as informações de uma moeda manualmente através de seu Id")
     //localhost:8080/api/auth/coins/update/1 - PUT
     @PutMapping("/coins/update/{id}")
     @ApiResponses({
@@ -149,11 +150,12 @@ public class CoinController {
 
         // Deleta uma moeda do BD através do ID
         coinRepository.deleteById(id);
+        // Verifica se o id é igual a nulo
         if (id == null) {
-
+            //Retorna uma resposta de não encontrado caso o id seje nulo
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);   
         }
-            // Retorna nenhuma informação ao cliente
+            // Retorna uma mensagem de moeda deletada com sucesso
             return ResponseEntity.ok(new MessageResponse("Coin deletada com sucesso!"));
     }
 

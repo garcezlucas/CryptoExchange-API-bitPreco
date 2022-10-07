@@ -69,9 +69,9 @@ public class ExchangeControllers {
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
     public ResponseEntity<List<Exchange>> listExchangesByExchange(@PathVariable("exchange") String exchange){
-
+        // Verifica se o tipo de transação é nulo
         if (exchange == null) {
-
+            //Retorna uma mensagem de não encontrado caso o tipo de transação seje nulo
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);   
         }else {
             // Retorna uma transação do BD através do Id
@@ -90,8 +90,9 @@ public class ExchangeControllers {
 
         // Busca as informações da transação no BD através do Id
         Exchange _exchange = exchangeRepository.getExchangeById(id);
+        // Verifica se o tipo de transação é nulo
         if (_exchange == null) {
-
+            // Retorna uma mensgaem de não encontrado caso o tipo de transação seje nulo
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);   
         }else {
             // Realiza o update das informações da transação
@@ -117,12 +118,13 @@ public class ExchangeControllers {
 
         // Deleta uma transação do BD
         exchangeRepository.deleteById(id);
+        // Verifica se o id busacdo é nulo
         if (id == null) {
-
+            // Retorna uma mensagem de não encontrada caso o id seje nulo
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }   
 
-        // Retorna nenhuma informação ao cliente
+        // Retorna uma mensagem de transação deletada com sucesso
         return ResponseEntity.ok(new MessageResponse("Transação deletado com sucesso!"));
     }
 

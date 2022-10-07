@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.cryptoexchange.cryptoexchange.payloads.responses.CoinResponse;
 
 //Comunicação com a API do bitPreço
-@FeignClient(url = "https://api.bitpreco.com/", name = "viacep")
+@FeignClient(url = "https://api.bitpreco.com/", name = "bitpreco")
 
 public interface CoinInterface {
 

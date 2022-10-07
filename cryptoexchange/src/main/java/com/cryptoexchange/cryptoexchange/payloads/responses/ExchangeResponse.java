@@ -1,5 +1,7 @@
 package com.cryptoexchange.cryptoexchange.payloads.responses;
 
+
+// // Dados que devem ser retornados pelo us
 public class ExchangeResponse {
     
     private Long id;
@@ -10,7 +12,7 @@ public class ExchangeResponse {
     private String date; 
 
     public ExchangeResponse() {
-
+        
     }
 
     public ExchangeResponse(Long id, String market, String exchange, Double value, Double amount, String date){
@@ -19,7 +21,6 @@ public class ExchangeResponse {
         this.value = value;
         this.amount = amount;
         this.date = date;
-
     }
 
     public Long getId() {
