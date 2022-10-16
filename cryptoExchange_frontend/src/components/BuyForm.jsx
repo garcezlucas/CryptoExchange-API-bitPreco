@@ -1,87 +1,178 @@
-import React, {useState, useEffect, useCallback} from 'react'
-import InputBase from './InputBase'
+import { useState, useRef } from "react";
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+import CheckButton from "react-validation/build/button";
 
+import ExchangeService from "../services/Exchange.service";
+import InputBase from "./InputBase";
 
-const BuyForm = ({data, onPurchase}) => {
+const BuyForm = (props) => {
 
+    const form = useRef();
+    const checkBtn = useRef();
 
-    const {name, rate} = data // name = props.data.name | rate = props.data.rate
-    const initForm = {amount: 0, converted: 0}
-
-    const [exchange, setExchange] = useState(initForm)
-
-    const [transactions, setTransactions] = useState([])
-
-    useEffect(() => {
-        setExchange({
-            ...exchange,
-            converted: Number(exchange.amount / rate).toFixed(8)
-        })
-    },[name])
-
-    useEffect(() =>{
-        onPurchase(transactions)
-    },[transactions])
-
-    const generateId = (prefix) => Math.random().toString().replace("0.", prefix)
+    const [market, setMarket] = useState("");
+    const [exchange, setExchange] = useState("");
+    const [value, setValue] = useState("");
+    const [amount, setAmount] = useState("");
+    const [date, setDate] = useState("");
     
-    const handleChange = ({target: {value, name}}) => {
+    const [successful, setSuccessful] = useState(false);
+    const [message, setMessage] = useState("");
 
-        //event.target.value
+    const onChangeMarket = (e) => {
+        const market = e.target.value;
+        setMarket(market);
+    };
 
-        const val = Number(value.trim())
-        const converted = (val/rate).toFixed(8)
+    const onChangeExchange = (e) => {
+        const exchange = e.target.value;
+        setExchange(exchange);
+    };
 
-        setExchange(
-            {
-                [name]:value,
-                rate:rate,
-                converted:converted
-            }
-        )
-    }
+    const onChangeValue = (e) => {
+        const value = e.target.value;
+        setValue(value);
+    };
 
-    const makePurchase = useCallback(
-        (event) => {
-            event.preventDefault()
+    const onChangeAmount = (e) => {
+        const amount = e.target.value;
+        setAmount(amount);
+    };    
 
-            if(!exchange.amount){
-                alert("Informe um valor válido!")
-            }
+    const onChangeDate = (e) => {
+        const date = e.target.value;
+        setDate(date);
+    };
+    
+    const handleExchange = (e) => {
+        e.preventDefault();
 
-            const payload = {
-                ...exchange,
-                name:name,
-                id:generateId("exchid_")
-            }
+        setMessage("");
+        setSuccessful(false);
 
-            setTransactions(
-                [...transactions, payload]
-            )
-        },[exchange, transactions]
-    )
+        form.current.validateAll();
+
+        if (checkBtn.current.context._errors.length === 0) {
+            ExchangeService.exchangeInsert(market, exchange, value, amount, date ).then(
+                (response) => {
+                    setMessage(response.data.message);
+                    setSuccessful(true);
+                },
+                (error) => {
+                    const resMessage =
+                        (error.response &&
+                            error.response.data &&
+                            error.response.data.message) ||
+                        error.message ||
+                        error.toString();
+
+                    setMessage(resMessage);
+                    setSuccessful(false);
+                }
+            );
+        }
+    };
+
 
     return (
-        <form onSubmit={makePurchase}>
+        <div className="col-md-12">
+            <div className="card card-container">
+                
 
-            <div className="buy-form-container">
+                <Form onSubmit={handleExchange} ref={form}>
+                    {!successful && (
+                        <div>
+                            <div className="form-group">
+                                <label>CriptoMoeda</label>
+                                <Input
+                                    type="text"
+                                    className="form-control"
+                                    name="exchange_market"
+                                    value={market}
+                                    onChange={onChangeMarket}
+                                />
+                            </div>
 
-                <h4>Comprar {name}</h4>
+                            <div className="form-group">
+                                <label>Tipo de transação</label>
+                                <Input
+                                    type="text"
+                                    className="form-control"
+                                    name="exchange"
+                                    value={exchange}
+                                    onChange={onChangeExchange}
+                                />
+                            </div>
 
-                {/* entrada de dados do valor em reais */}
-                <InputBase name="amount" label="BRL" onChange={handleChange}  className="brl-input"/>
+                            <div className="form-group">
+                                <label>Valor Transação</label>
+                                {/* entrada de dados do valor em reais */}
+                                <InputBase 
+                                className="brl-input"
+                                name="amount" 
+                                label="BRL"
+                                value ={amount}
+                                onChange={onChangeAmount}
+                                />
+                            </div>
 
-                {/* resultado da conversão do valor em reais pela taxa de câmbio da criptomoeda */}
-                <InputBase 
-                    value={exchange.converted} disabled label={name}
-                />
+                            <div className="form-group">
+                                <label>Quantidade de moedas</label>
+                                {/* resultado da conversão do valor em reais pela taxa de câmbio da criptomoeda  */}
+                                <input 
+                                    className="form-control"
+                                    name="amount"
+                                    value={exchange.converted} 
+                                    placeholder={market}                                    
+                                    disabled label={market}
+                                />
 
-                <button type="submit" value="Comprar" />
+                                {/* <Input
+                                    type="text"
+                                    className="form-control"
+                                    name="amount"
+                                    value={amount}
+                                    onChange={onChangeAmount}
+                                /> */}
+                            </div>
+
+                            <div className="form-group">
+                                <label>Data da transação</label>
+                                <Input
+                                    type="text"
+                                    className="form-control"
+                                    name="date"
+                                    value={date}
+                                    onChange={onChangeDate}
+                                />
+                            </div>
+
+                            
+
+                            <div className="form-group">
+                                <button className="btn btn-primary btn-block">Comprar</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {message && (
+                        <div className="form-group">
+                            <div
+                                className={
+                                    successful ? "alert alert-success" : "alert alert-danger"
+                                }
+                                role="alert"
+                            >
+                                {message}
+                            </div>
+                        </div>
+                    )}
+                    <CheckButton style={{ display: "none" }} ref={checkBtn} />
+                </Form>
             </div>
+        </div>
+    );
+};
 
-        </form>
-    )
-
-}
-
-export default BuyForm
+export default BuyForm;

@@ -4,7 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 
-import AuthService from "../services/Auth.service";
+import AuthService from "../../services/Auth.service";
 
 const required = (value) => {
     if (!value) {

@@ -39,3 +39,49 @@ label {
   margin-right: auto;
   
 }
+
+
+/* .mainContainer {
+  display: flex;
+  flex-direction: row;
+} */
+
+.card{
+  text-align: center;
+  width: 300px;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.card.selected {
+  border: 1px solid cadetblue;
+  background-color: cadetblue;
+  border-radius: 5px
+}
+
+.cardsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  margin-top: 10%;
+  padding-bottom: 5%;
+  padding-top: 5%;
+  font-size: 18px;
+  border-radius: 5px;
+  border: 1px solid cadetblue;
+  color:dimgray;
+}
+
+.buy-form-container{
+  display: flex;
+  flex-direction: column;
+  padding-top: 5%;
+  align-items: center;
+  padding-bottom: 5%;
+  border-radius: 5px;
+  border: 1px solid cadetblue;
+  margin-top: 5%;
+  margin-bottom: 5%;
+}

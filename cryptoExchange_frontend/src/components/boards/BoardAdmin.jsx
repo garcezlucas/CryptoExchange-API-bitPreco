@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-import UserService from "../services/User.service";
-import EventBus from "../common/EventBus";
+import UserService from "../../services/User.service";
+import EventBus from "../../common/EventBus";
 
-const BoardUser = () => {
+const BoardAdmin = () => {
     const [content, setContent] = useState("");
 
     useEffect(() => {
-        UserService.getUserBoard().then(
+        UserService.getAdminBoard().then(
             (response) => {
                 setContent(response.data);
             },
@@ -37,4 +37,4 @@ const BoardUser = () => {
     );
 };
 
-export default BoardUser;
+export default BoardAdmin;

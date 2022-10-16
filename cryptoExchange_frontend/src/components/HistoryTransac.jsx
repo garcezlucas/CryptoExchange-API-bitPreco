@@ -35,3 +35,26 @@ const HistoryTransactions = ({list}) => {
 }
 
 export default HistoryTransactions
+
+
+
+
+// import React, {useState, useEffect} from 'react'
+// import History from './HistoryTransac'
+
+// const Transactions = () => {
+
+//     const [list, setList] = useState([])
+
+//     const buildList = (list) => {
+//         setList(list)
+//     }
+
+//     return (
+//         <div>
+//             <History list={list} />
+//         </div>
+//     )
+// }
+
+// export default Transactions

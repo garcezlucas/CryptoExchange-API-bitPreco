@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 
-import UserService from "../services/User.service";
-import EventBus from "../common/EventBus";
+import CoinService from "../../services/Coin.service";
+import EventBus from "../../common/EventBus";
 
-const BoardAdmin = () => {
+const Coin = () => {
     const [content, setContent] = useState("");
+    const [name, setName] = useState("content.market");
 
     useEffect(() => {
-        UserService.getAdminBoard().then(
+        CoinService.getEthereum().then(
             (response) => {
                 setContent(response.data);
             },
@@ -28,13 +29,19 @@ const BoardAdmin = () => {
         );
     }, []);
 
+    
+
+
+
     return (
-        <div className="container">
-            <header className="jumbotron">
-                <h3>{content}</h3>
-            </header>
+        <div>
+            {content.market}
+            {content.buy}
         </div>
+
     );
 };
 
-export default BoardAdmin;
+
+
+export default Coin;

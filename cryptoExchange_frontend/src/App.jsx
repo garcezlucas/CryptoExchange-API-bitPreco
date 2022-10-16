@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "@fortawesome/fontawesome-free/css/all.css";
+import "@fortawesome/fontawesome-free/js/all.js";
 import "./App.css";
 
 import AuthService from "./services/Auth.service";
 
-import Login from "./components/Login";
-import Register from "./components/Register";
+import Login from "./components/authentication/Login";
+import Register from "./components/authentication/Register";
 import Home from "./components/Home";
-import Profile from "./components/Profile";
-import BoardUser from "./components/BoardUser";
-import BoardPremium from "./components/BoardPremium";
-import BoardAdmin from "./components/BoardAdmin";
+import Profile from "./components/authentication/Profile";
+import BoardPremium from "./components/boards/BoardPremium";
+import BoardAdmin from "./components/boards/BoardAdmin";
 import Shopping from "./components/Shopping";
-import Transactions from "./components/Transactions";
+import Exchange from "./components/Exchanges";
+import AlienCoin from "./images/AlienCoin.png"
 
 import EventBus from "./common/EventBus";
 
@@ -50,9 +52,12 @@ const App = () => {
   return (
     <div>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <Link to={"/"} className="navbar-brand">
-          AlienCoin
-        </Link>
+        <div className="navbar-brand" href="#">
+          <img src={AlienCoin} width="30" height="30" className="d-inline-block align-center" alt=""/>
+          <Link to={"/"} className="navbar-brand">
+            AlienCoin
+          </Link>
+        </div>
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
             <Link to={"/home"} className="nav-link">
@@ -75,28 +80,22 @@ const App = () => {
               </Link>
             </li>
           )}
+        </div>
 
-          {currentUser && (
+        {currentUser && (
+          <div className="navbar-nav mr-auto">
             <li className="nav-item">
-              <Link to={"/user"} className="nav-link">
-                User
+              <Link to={"/buy"} className="nav-link">
+                Comprar
               </Link>
             </li>
-          )}
-        </div>
-
-        <div className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link to={"/buy"} className="nav-link">
-              Comprar
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to={"/transaction"} className="nav-link">
-              Transações
-            </Link>
-          </li>
-        </div>
+            <li className="nav-item">
+              <Link to={"/exchange"} className="nav-link">
+                Transações
+              </Link>
+            </li>
+          </div>
+        )}
 
         {currentUser ? (
           <div className="navbar-nav ml-auto">
@@ -135,11 +134,10 @@ const App = () => {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/profile" element={<Profile />} />
-          <Route path="/user" element={<BoardUser />} />
           <Route path="/premium" element={<BoardPremium />} />
           <Route path="/admin" element={<BoardAdmin />} />
-          <Route path="/buy" element={<Shopping />} />
-          <Route path="/transaction" element={<Transactions />} />
+          <Route exact path="/buy" element={<Shopping />} />
+          <Route exact path="/exchange" element={<Exchange />} />
         </Routes>
       </div>
 
