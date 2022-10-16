@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+// import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +41,7 @@ public class CoinController {
     private CoinRepository coinRepository;
 
     @ApiOperation(value="Cria uma nova moeda")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
+    // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/btc-brl/ticket - GET
     @GetMapping("/{market}/ticker")
     @ApiResponses({
@@ -101,7 +101,7 @@ public class CoinController {
     }
 
     @ApiOperation(value = "Lista todas as moedas")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
+    // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/coins?list/all - GET
     @GetMapping(value = "/coins/list/all")
     @ApiResponses({
@@ -115,7 +115,7 @@ public class CoinController {
     }
 
     @ApiOperation(value = "Busca uma moeda através de seu Id")
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
+    // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/coins/list/1 - GET
     @GetMapping(value = "/coins/list/{id}")
     @ApiResponses({
@@ -135,7 +135,7 @@ public class CoinController {
     }
 
     @ApiOperation(value = "Atualiza as informações de uma moeda manualmente através de seu Id")
-    @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
+    // @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/coins/update/1 - PUT
     @PutMapping("/coins/update/{id}")
     @ApiResponses({
@@ -165,7 +165,7 @@ public class CoinController {
     }
 
     @ApiOperation(value = "Deleta uma moeda através de seu Id")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    // @PreAuthorize("hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/coins/delete/1 - DELETE
     @DeleteMapping(value = "/coins/delete/{id}")
     @ApiResponses({

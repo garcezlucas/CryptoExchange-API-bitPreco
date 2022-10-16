@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+// import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,7 +35,7 @@ public class UserController{
     UserRepository userRepository;
 
     @ApiOperation(value = "Lista de todods os usuários")
-    @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
+    // @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/users/list/all - GET
     @GetMapping(value = "/users/list/all")
     @ApiResponses({
@@ -49,7 +49,7 @@ public class UserController{
     }
 
     @ApiOperation(value = "Buscando usuários por nome", produces = "application/json")
-    @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
+    // @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/users/?username=bob - GET
     @GetMapping("/users/")
     @ApiResponses({
@@ -70,7 +70,7 @@ public class UserController{
     }
 
     @ApiOperation(value = "Buscando um usuário por id", produces = "application/json")
-    @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
+    // @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/users/1 - GET
     @GetMapping("users/{id}")    
     @ApiResponses({
@@ -92,7 +92,7 @@ public class UserController{
 
     @ApiOperation(value = "Atualizando o usuário")
     @PutMapping("users/update/{id}")
-    @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
+    // @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/users/update/{id} - PUT
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
@@ -119,7 +119,7 @@ public class UserController{
 
     @ApiOperation(value = "Deletando o usuário")
     @DeleteMapping(value = "/users/delete/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    // @PreAuthorize("hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/users/delete/{Id} - DELETE
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),

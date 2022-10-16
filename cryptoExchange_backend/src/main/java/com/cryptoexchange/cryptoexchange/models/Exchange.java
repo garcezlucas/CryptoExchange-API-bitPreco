@@ -1,11 +1,18 @@
 package com.cryptoexchange.cryptoexchange.models;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 // Cria a tabela exchange e suas colunas no BD
@@ -33,16 +40,22 @@ public class Exchange {
     @Column(name = "exchange_date", columnDefinition = "TEXT", nullable = false, length = 25)
     private String date; 
 
+    @ManyToOne
+    @JoinColumn(name = "u_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
+
     public Exchange() {
 
     }
 
-    public Exchange(Long id, String market, String exchange, Double value, Double amount, String date){
+    public Exchange(Long id, String market, String exchange, Double value, Double amount, String date, User user){
         this.market = market;
         this.exchange = exchange;
         this.value = value;
         this.amount = amount;
         this.date = date;
+        this.user = user;
 
     }
 
@@ -94,4 +107,15 @@ public class Exchange {
         this.market = market;
     }
 
+    public static List<Exchange> findByUser(long id2) {
+        return null;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
