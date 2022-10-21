@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-import UserService from "../services/User.service";
+// import UserService from "../services/User.service";
 import AlienCoin from "../images/AlienCoin.png"
 
 const Home = () => {
-    const [content, setContent] = useState("");
+    // const [content, setContent] = useState("");
 
     // useEffect(() => {
     //     UserService.getPublicContent().then(
@@ -31,7 +31,7 @@ const Home = () => {
         
         <div className="container">
                 <header className="jumbotron">
-                    <h3>{content}</h3>
+                    {/* <h3>{content}</h3> */}
                 </header>
         </div></>
     );

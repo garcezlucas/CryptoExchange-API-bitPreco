@@ -11,15 +11,30 @@ import Login from "./components/authentication/Login";
 import Register from "./components/authentication/Register";
 import Home from "./components/Home";
 import Profile from "./components/authentication/Profile";
-import BoardPremium from "./components/boards/BoardPremium";
-import BoardAdmin from "./components/boards/BoardAdmin";
-import Shopping from "./components/Shopping";
+import BoardPremium from "./components/boards/premium/BoardPremium";
+import BoardPremiumCoins from "./components/boards/premium/BoardPremiumCoin";
+import BoardPremiumExchanges from "./components/boards/premium/BoardPremiumExchange";
+import BoardPremiumUsers from "./components/boards/premium/BoardPremiumUser";
+import BoardAdmin from "./components/boards/admin/BoardAdmin";
+import BoardAdminCoins from "./components/boards/admin/BoardAdminCoin";
+import BoardAdminExchanges from "./components/boards/admin/BoardAdminExchange";
+// import BoardAdminExchanges from "./components/boards/AdminExchangeDemo";
+import BoardAdminUsers from "./components/boards/admin/BoardAdminUser";
+import BoardAdminCreateUSer from "./components/boards/editBoards/CreateUser";
+import BuyForm from "./components/BuyForm";
 import Exchange from "./components/Exchanges";
+// import EditExchanges from "./components/boards/editBoards/EditExchanges";
+import EditExchanges from "./components/EditExchangeDemo";
+import EditCoins from "./components/EditCoinDemo";
+import EditUsers from "./components/EditUserDemo";
+// import EditCoins from "./components/boards/editBoards/EditCoins";
+// import EditUsers from "./components/boards/editBoards/EditUsers";
+
 import AlienCoin from "./images/AlienCoin.png"
 
 import EventBus from "./common/EventBus";
 
-const App = () => {
+function App  ()  {
   const [showPremiumBoard, setShowPremiumBoard] = useState(false);
   const [showAdminBoard, setShowAdminBoard] = useState(false);
   const [currentUser, setCurrentUser] = useState(undefined);
@@ -29,7 +44,7 @@ const App = () => {
 
     if (user) {
       setCurrentUser(user);
-      setShowPremiumBoard(user.roles.includes("ROLE_PREMIUM"));
+      setShowPremiumBoard(user.roles.includes("ROLE_PREMIUM" && "ROLE_ADMIN"));
       setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
     }
 
@@ -65,18 +80,18 @@ const App = () => {
             </Link>
           </li>
 
-          {showPremiumBoard && (
+          {showAdminBoard && (
             <li className="nav-item">
-              <Link to={"/mod"} className="nav-link">
-                Premium Board
+              <Link to={"/admin"} className="nav-link">
+                Admin
               </Link>
             </li>
           )}
 
-          {showAdminBoard && (
+          {showPremiumBoard && (
             <li className="nav-item">
-              <Link to={"/admin"} className="nav-link">
-                Admin Board
+              <Link to={"/premium"} className="nav-link">
+                Premium
               </Link>
             </li>
           )}
@@ -89,6 +104,7 @@ const App = () => {
                 Comprar
               </Link>
             </li>
+          
             <li className="nav-item">
               <Link to={"/exchange"} className="nav-link">
                 Transações
@@ -134,10 +150,20 @@ const App = () => {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/profile" element={<Profile />} />
-          <Route path="/premium" element={<BoardPremium />} />
-          <Route path="/admin" element={<BoardAdmin />} />
-          <Route exact path="/buy" element={<Shopping />} />
+          <Route exact path="/premium" element={<BoardPremium />} />
+          <Route exact path="/admin" element={<BoardAdmin />} />
+          <Route exact path="/adminexchanges" element={<BoardAdminExchanges />} />
+          <Route exact path="/adminusers" element={<BoardAdminUsers />} />
+          <Route exact path="/admincoins" element={<BoardAdminCoins />} />
+          <Route exact path="/premiumcoins" element={<BoardPremiumCoins />} />
+          <Route exact path="/premiumexchanges" element={<BoardPremiumExchanges />} />
+          <Route exact path="/premiumusers" element={<BoardPremiumUsers/>} />
+          <Route exact path="/buy" element={<BuyForm />} />
           <Route exact path="/exchange" element={<Exchange />} />
+          <Route exact path="/createuser" element={<BoardAdminCreateUSer />} />
+          <Route exact path="/editexchanges/:id" element={<EditExchanges />} />
+          <Route exact path="/editcoins/:id" element={<EditCoins />} />
+          <Route exact path="/editusers/:id" element={<EditUsers />} />
         </Routes>
       </div>
 

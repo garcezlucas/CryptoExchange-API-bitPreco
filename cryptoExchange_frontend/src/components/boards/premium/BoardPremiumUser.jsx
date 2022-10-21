@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useMemo } from "react";
-import ExchangeDataService from "../services/Exchange.service";
+import UserDataService from "../../../services/User.service";
 import { useTable } from "react-table";
 
-const ExchangeList = (props) => {
-    const [exchanges, setExchanges] = useState([]);
+const UserList = (props) => {
+    const [users, setUsers] = useState([]);
     
 
     useEffect(() => {
-        retrieveExchanges();
+        retrieveUsers();
     }, []);
 
-    const retrieveExchanges = () => {
-        ExchangeDataService.getExchangeByUserId()
+    const retrieveUsers = () => {
+        UserDataService.getAllUsers()
             .then((response) => {
-                setExchanges(response.data);
+                setUsers(response.data);
             })
             .catch((e) => {
                 console.log(e);
@@ -23,30 +23,22 @@ const ExchangeList = (props) => {
     
         const columns = useMemo(
             () => [
-                {
-                    Header: "CriptoMoeda",
-                    accessor: "market",
-                },
-                {
-                    Header: "Tipo Transação",
-                    accessor: "exchange",
-                },
-                {
-                    Header: "Valor Cripto",
-                    accessor: "value",
-                },
-                {
-                    Header: "Quantidade Reais",
-                    accessor: "amount",
-                },
-                {
-                    Header: "Quantidade Cripto",
-                    accessor: "price",
-                },
-                {
-                    Header: "Data",
-                    accessor: "date",
-                },
+            {
+                Header: "Id",
+                accessor: "id",
+            },
+            {
+                Header: "Usuário",
+                accessor: "username",
+            },
+            {
+                Header: "Email",
+                accessor: "email",
+            },
+            {
+                Header: "Roles",
+                accessor: "roles.name",
+            },
             ],
             []
         );
@@ -60,7 +52,7 @@ const ExchangeList = (props) => {
         prepareRow,
     } = useTable({
         columns,
-        data: exchanges,
+        data: users,
     });
 
     return (
@@ -104,9 +96,7 @@ const ExchangeList = (props) => {
     
 };
 
-export default ExchangeList;
-
-
+export default UserList;
 
 
 

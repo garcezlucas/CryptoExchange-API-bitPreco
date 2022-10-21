@@ -4,7 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 
-import AuthService from "../../services/Auth.service";
+import AuthService from "../../../services/Auth.service";
 
 const required = (value) => {
     if (!value) {
@@ -53,6 +53,7 @@ const Register = (props) => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [role, setRole] = useState("");
     const [successful, setSuccessful] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -71,6 +72,11 @@ const Register = (props) => {
         setPassword(password);
     };
 
+    const onChangeRole = (e) => {
+        const role = e.target.value;
+        setRole(role);
+    };
+
     const handleRegister = (e) => {
         e.preventDefault();
 
@@ -80,7 +86,7 @@ const Register = (props) => {
         form.current.validateAll();
 
         if (checkBtn.current.context._errors.length === 0) {
-            AuthService.register(username, email, password).then(
+            AuthService.register(username, email, password, role).then(
                 (response) => {
                     setMessage(response.data.message);
                     setSuccessful(true);
@@ -145,6 +151,18 @@ const Register = (props) => {
                                     value={password}
                                     onChange={onChangePassword}
                                     validations={[required, vpassword]}
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="password">Roles</label>
+                                <Input
+                                    type="text"
+                                    className="form-control"
+                                    name="role"
+                                    value={role}
+                                    onChange={onChangeRole}
+                                    validations={[required]}
                                 />
                             </div>
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import ExchangeDataService from "../services/Exchange.service";
+import ExchangeDataService from "../../../services/Exchange.service";
 import { useTable } from "react-table";
 
 const ExchangeList = (props) => {
@@ -11,7 +11,7 @@ const ExchangeList = (props) => {
     }, []);
 
     const retrieveExchanges = () => {
-        ExchangeDataService.getExchangeByUserId()
+        ExchangeDataService.getAllExchange()
             .then((response) => {
                 setExchanges(response.data);
             })
@@ -24,6 +24,10 @@ const ExchangeList = (props) => {
         const columns = useMemo(
             () => [
                 {
+                    Header: "Usuário",
+                    accessor: "user.username",
+                },
+                {
                     Header: "CriptoMoeda",
                     accessor: "market",
                 },
@@ -32,16 +36,12 @@ const ExchangeList = (props) => {
                     accessor: "exchange",
                 },
                 {
-                    Header: "Valor Cripto",
+                    Header: "Valor",
                     accessor: "value",
                 },
                 {
-                    Header: "Quantidade Reais",
+                    Header: "Quantidade",
                     accessor: "amount",
-                },
-                {
-                    Header: "Quantidade Cripto",
-                    accessor: "price",
                 },
                 {
                     Header: "Data",
@@ -105,8 +105,6 @@ const ExchangeList = (props) => {
 };
 
 export default ExchangeList;
-
-
 
 
 

@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useMemo } from "react";
-import ExchangeDataService from "../services/Exchange.service";
+import CoinsDataService from "../../../services/Coin.service";
 import { useTable } from "react-table";
 
-const ExchangeList = (props) => {
-    const [exchanges, setExchanges] = useState([]);
+const CoinsList = (props) => {
+    const [coins, setCoins] = useState([]);
     
 
     useEffect(() => {
-        retrieveExchanges();
+        retrieveCoins();
     }, []);
 
-    const retrieveExchanges = () => {
-        ExchangeDataService.getExchangeByUserId()
+    const retrieveCoins = () => {
+        CoinsDataService.getAllCoins()
             .then((response) => {
-                setExchanges(response.data);
+                setCoins(response.data);
             })
             .catch((e) => {
                 console.log(e);
@@ -28,24 +28,16 @@ const ExchangeList = (props) => {
                     accessor: "market",
                 },
                 {
-                    Header: "Tipo Transação",
-                    accessor: "exchange",
+                    Header: "Preço de Compra",
+                    accessor: "buy",
                 },
                 {
-                    Header: "Valor Cripto",
-                    accessor: "value",
+                    Header: "Preço de Venda",
+                    accessor: "sell",
                 },
                 {
-                    Header: "Quantidade Reais",
-                    accessor: "amount",
-                },
-                {
-                    Header: "Quantidade Cripto",
-                    accessor: "price",
-                },
-                {
-                    Header: "Data",
-                    accessor: "date",
+                    Header: "Hora da ultima atualização",
+                    accessor: "timestamp",
                 },
             ],
             []
@@ -60,7 +52,7 @@ const ExchangeList = (props) => {
         prepareRow,
     } = useTable({
         columns,
-        data: exchanges,
+        data: coins,
     });
 
     return (
@@ -104,9 +96,7 @@ const ExchangeList = (props) => {
     
 };
 
-export default ExchangeList;
-
-
+export default CoinsList;
 
 
 

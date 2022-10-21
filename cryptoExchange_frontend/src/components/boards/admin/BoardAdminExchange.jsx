@@ -1,57 +1,16 @@
-// import React, { useState, useEffect } from "react";
-
-// import UserService from "../../services/User.service";
-// import EventBus from "../../common/EventBus";
-
-// const BoardPremium = () => {
-//     const [content, setContent] = useState("");
-
-//     useEffect(() => {
-//         UserService.getPremiumBoard().then(
-//             (response) => {
-//                 setContent(response.data);
-//             },
-//             (error) => {
-//                 const _content =
-//                     (error.response &&
-//                         error.response.data &&
-//                         error.response.data.message) ||
-//                     error.message ||
-//                     error.toString();
-
-//                 setContent(_content);
-
-//                 if (error.response && error.response.status === 401) {
-//                     EventBus.dispatch("logout");
-//                 }
-//             }
-//         );
-//     }, []);
-
-//     return (
-//         <div className="container">
-//             <header className="jumbotron">
-//                 <h3>{content}</h3>
-//             </header>
-//         </div>
-//     );
-// };
-
-// export default BoardPremium;
-
-
-
-
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import ExchangeDataService from "../../services/Exchange.service";
+import ExchangeDataService from "../../../services/Exchange.service";
 import { useTable } from "react-table";
+import { useNavigate } from 'react-router-dom';
 
-const ExchangeList = (props) => {
+const BoardAdmin = (props) => {
     const [exchanges, setExchanges] = useState([]);
     const [searchExchange, setSearchExchange] = useState("");
     const exchangesRef = useRef();
 
-    // exchangesRef.current = exchanges;
+    const history = useNavigate();
+    
+    exchangesRef.current = exchanges;
 
     useEffect(() => {
         retrieveExchanges();
@@ -63,7 +22,7 @@ const ExchangeList = (props) => {
     };
 
     const retrieveExchanges = () => {
-        ExchangeDataService.getExchange()
+        ExchangeDataService.getAllExchange()
             .then((response) => {
                 setExchanges(response.data);
             })
@@ -77,7 +36,7 @@ const ExchangeList = (props) => {
     };
 
     const removeAllExchanges = () => {
-        ExchangeDataService.removeAll()
+        ExchangeDataService.deleteAll()
             .then((response) => {
                 console.log(response.data);
                 refreshList();
@@ -88,7 +47,7 @@ const ExchangeList = (props) => {
     };
 
     const findByExchange = () => {
-        ExchangeDataService.findByExchange(searchExchange)
+        ExchangeDataService.getExchangeByExchange(searchExchange)
             .then((response) => {
                 setExchanges(response.data);
             })
@@ -99,35 +58,45 @@ const ExchangeList = (props) => {
 
     const openExchange = (rowIndex) => {
         const id = exchangesRef.current[rowIndex].id;
+        history("/editexchanges/" + id, {
+            state:{
+                id
+            }
+        });
 
-        props.history.push("/exchanges/" + id);
     };
 
-    const deleteExchangeById = (rowIndex) => {
+    const deleteExchange = (rowIndex) => {         
         const id = exchangesRef.current[rowIndex].id;
 
-        ExchangeDataService.remove(id)
+        ExchangeDataService.deleteExchangeById(id)
             .then((response) => {
-                props.history.push("/exchanges/delete");
+
 
                 let newExchanges = [...exchangesRef.current];
                 newExchanges.splice(rowIndex, 1);
 
                 setExchanges(newExchanges);
+                refreshList();
             })
             .catch((e) => {
                 console.log(e);
             });
+            
     };
 
     const columns = useMemo(
         () => [
             {
+                Header: "Usuário",
+                accessor: "user.username",
+            },
+            {
                 Header: "CriptoMoeda",
                 accessor: "market",
             },
             {
-                Header: "Tipo Transação",
+                Header: "Tipo de Transação",
                 accessor: "exchange",
             },
             {
@@ -143,13 +112,6 @@ const ExchangeList = (props) => {
                 accessor: "date",
             },
             {
-                Header: "Status",
-                accessor: "published",
-                Cell: (props) => {
-                    return props.value ? "Published" : "Pending";
-                },
-            },
-            {
                 Header: "Actions",
                 accessor: "actions",
                 Cell: (props) => {
@@ -160,7 +122,7 @@ const ExchangeList = (props) => {
                                 <i className="far fa-edit action mr-2"></i>
                             </span>
 
-                            <span onClick={() => deleteExchangeById(rowIdx)}>
+                            <span onClick={() => deleteExchange(rowIdx)}>
                                 <i className="fas fa-trash action"></i>
                             </span>
                         </div>
@@ -189,7 +151,7 @@ const ExchangeList = (props) => {
                     <input
                         type="text"
                         className="form-control"
-                        placeholder="Search by title"
+                        placeholder="Procurar por Transações"
                         value={searchExchange}
                         onChange={onChangeSearchExchange}
                     />
@@ -199,7 +161,7 @@ const ExchangeList = (props) => {
                         type="button"
                         onClick={findByExchange}
                         >
-                        Search
+                        Procurar
                         </button>
                     </div>
                 </div>
@@ -238,12 +200,21 @@ const ExchangeList = (props) => {
             </div>
 
             <div className="col-md-8">
-                <button className="btn btn-sm btn-danger" onClick={removeAllExchanges}>
-                    Remove All
+                <button
+                    className="btn badge-pill badge-danger mr-2" 
+                    onClick={removeAllExchanges}
+                >
+                    Deletar Transações
+                </button>
+                <button 
+                    className="btn badge-pill badge-info" 
+                    onClick={retrieveExchanges}
+                >
+                    Todas Transações
                 </button>
             </div>
         </div>
     );
 };
 
-export default ExchangeList;
+export default BoardAdmin;
