@@ -112,7 +112,7 @@ const BoardAdmin = (props) => {
                 accessor: "date",
             },
             {
-                Header: "Actions",
+                Header: "",
                 accessor: "actions",
                 Cell: (props) => {
                     const rowIdx = props.row.id;
@@ -123,7 +123,7 @@ const BoardAdmin = (props) => {
                             </span>
 
                             <span onClick={() => deleteExchange(rowIdx)}>
-                                <i className="fas fa-trash action"></i>
+                                <i className="fas fa-trash action mr-2"></i>
                             </span>
                         </div>
                     );
@@ -158,6 +158,7 @@ const BoardAdmin = (props) => {
                     <div className="input-group-append">
                         <button
                         className="btn btn-outline-secondary"
+                        data-toggle="button"
                         type="button"
                         onClick={findByExchange}
                         >
@@ -167,47 +168,52 @@ const BoardAdmin = (props) => {
                 </div>
             </div>
             <div className="col-md-12 list">
-                <table
-                    className="table table-striped table-bordered"
-                    {...getTableProps()}
-                >
-                    <thead>
-                        {headerGroups.map((headerGroup) => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map((column) => (
-                                    <th {...column.getHeaderProps()}>
-                                        {column.render("Header")}
-                                    </th>
-                                ))}
-                            </tr>
-                        ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()}>
-                        {rows.map((row, i) => {
-                            prepareRow(row);
-                                return (
-                                    <tr {...row.getRowProps()}>
-                                        {row.cells.map((cell) => {
-                                            return (
-                                                <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                                            );
-                                        })}
-                                    </tr>
-                                );
-                        })}
-                    </tbody>
-                </table>
+                <div className="tbl-container bdr">
+                    <table
+                        className="table"
+                        class= "table table-striped "
+                        {...getTableProps()}
+                    >
+                        <thead class="table-head">
+                            {headerGroups.map((headerGroup) => (
+                                <tr {...headerGroup.getHeaderGroupProps()}>
+                                    {headerGroup.headers.map((column) => (
+                                        <th {...column.getHeaderProps()}>
+                                            {column.render("Header")}
+                                        </th>
+                                    ))}
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody {...getTableBodyProps()}>
+                            {rows.map((row, i) => {
+                                prepareRow(row);
+                                    return (
+                                        <tr {...row.getRowProps()}>
+                                            {row.cells.map((cell) => {
+                                                return (
+                                                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                                );
+                                            })}
+                                        </tr>
+                                    );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div className="col-md-8">
                 <button
                     className="btn badge-pill badge-danger mr-2" 
+                    data-toggle="button"
                     onClick={removeAllExchanges}
                 >
                     Deletar Transações
                 </button>
                 <button 
-                    className="btn badge-pill badge-info" 
+                    className="btn badge-pill badge-info mr-2" 
+                    data-toggle="button"
                     onClick={retrieveExchanges}
                 >
                     Todas Transações

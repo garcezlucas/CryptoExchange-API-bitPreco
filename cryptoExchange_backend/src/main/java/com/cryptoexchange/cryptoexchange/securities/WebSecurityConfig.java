@@ -61,6 +61,7 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     // Permissões de segurança Http da aplicação
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

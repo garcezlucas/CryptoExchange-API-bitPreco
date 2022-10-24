@@ -2,19 +2,50 @@ package com.cryptoexchange.cryptoexchange.payloads.responses;
 
 import java.util.List;
 
+import org.springframework.http.ResponseCookie;
+
 
 // Dados que devem ser retornados pelo usuário
 public class UserInfoResponse {
+	private ResponseCookie token;
+	private String type = "Bearer";
+	private String refreshToken;
 	private Long id;
 	private String username;
 	private String email;
 	private List<String> roles;
 
-	public UserInfoResponse(Long id, String username, String email, List<String> roles) {
+	public UserInfoResponse(ResponseCookie jwtCookie, String refreshToken, Long id, String username, String email, List<String> roles) {
+		this.token = jwtCookie;
+		this.refreshToken = refreshToken;
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.roles = roles;
+	}
+
+	public ResponseCookie getAccessToken() {
+		return token;
+	}
+
+	public void setAccessToken(ResponseCookie accessToken) {
+		this.token = accessToken;
+	}
+
+	public String getTokenType() {
+		return type;
+	}
+
+	public void setTokenType(String tokenType) {
+		this.type = tokenType;
+	}
+
+	public String getRefreshToken() {
+		return refreshToken;
+	}
+
+	public void setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
 	}
 
 	public Long getId() {

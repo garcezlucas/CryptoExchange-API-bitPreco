@@ -9,17 +9,19 @@ public class ExchangeResponse {
     private String exchange;
     private Double value;
     private Double amount;
+    private Double price;
     private String date; 
 
     public ExchangeResponse() {
         
     }
 
-    public ExchangeResponse(Long id, String market, String exchange, Double value, Double amount, String date){
+    public ExchangeResponse(Long id, String market, String exchange, Double value, Double amount, Double price, String date){
         this.market = market;
         this.exchange = exchange;
         this.value = value;
         this.amount = amount;
+        this.price = price;
         this.date = date;
     }
 
@@ -54,6 +56,14 @@ public class ExchangeResponse {
     public void setAmount(Double amount) {
         this.amount = amount;
     }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }    
 
     public String getDate() {
         return date;

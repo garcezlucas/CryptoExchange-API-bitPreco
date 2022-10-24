@@ -58,7 +58,7 @@ public class RefreshTokenService {
     }
     // Deleta o refreshToken do BD através do Id de usuário
     @Transactional
-    public int deleteByUserId(Long userId) {
-        return refreshTokenRepository.deleteByUser(userRepository.findById(userId).get());
+    public int deleteByUserId(Long Id) {
+        return refreshTokenRepository.deleteByUser(userRepository.findById(Id).get());
     }
 }

@@ -1,39 +1,27 @@
 import React from "react";
 
-// import UserService from "../services/User.service";
 import AlienCoin from "../images/AlienCoin.png"
 
 const Home = () => {
-    // const [content, setContent] = useState("");
 
-    // useEffect(() => {
-    //     UserService.getPublicContent().then(
-    //         (response) => {
-    //             setContent(response.data);
-    //         },
-    //         (error) => {
-    //             const _content =
-    //                 (error.response && error.response.data) ||
-    //                 error.message ||
-    //                 error.toString();
-
-    //             setContent(_content);
-    //         }
-    //     );
-    // }, []);
-
-    
 
     return (
-        <><div>
-            <img src={AlienCoin} alt="icon" className='coin-icon' />
+        <>
+        <div className="container-home">
+            <div className="container-text">
+                <div class="jumbotron">
+                    <h1 class="display-4">Venha para o futuro!</h1>
+                    <p class="lead"></p>
+                    <hr class="my-4"/>
+                    <p>Não perca tempo, conquiste sua liberdade financeira investindo em Criptomoedas.</p>
+                </div>
+            </div>
+            <div>
+                <img src={AlienCoin} alt="icon" className='coin-icon' />
+                
+            </div>
         </div>
-        
-        <div className="container">
-                <header className="jumbotron">
-                    {/* <h3>{content}</h3> */}
-                </header>
-        </div></>
+        </>
     );
 };
 

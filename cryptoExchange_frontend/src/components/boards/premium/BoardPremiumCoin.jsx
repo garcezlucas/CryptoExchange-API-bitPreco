@@ -59,10 +59,11 @@ const CoinsList = (props) => {
         
         <div className="col-md-12 list">
             <table
-                className="table table-striped table-bordered"
+                className="table"
+                class= "table tabletable-striped"
                 {...getTableProps()}
             >
-                <thead>
+                <thead class="table-head">
                     {headerGroups.map((headerGroup) => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
                             {headerGroup.headers.map((column) => (

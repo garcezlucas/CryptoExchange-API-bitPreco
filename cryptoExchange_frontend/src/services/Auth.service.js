@@ -17,7 +17,8 @@ const login = (username, password) => {
         })
         .then((response) => {
             if (response.data.username) {
-                TokenService.setUser(response.data);
+                // TokenService.setUser(response.data);
+                localStorage.setItem("user", JSON.stringify(response.data));
             }
 
             return response.data;

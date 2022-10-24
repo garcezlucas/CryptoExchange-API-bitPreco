@@ -35,10 +35,6 @@ const UserList = (props) => {
                 Header: "Email",
                 accessor: "email",
             },
-            {
-                Header: "Roles",
-                accessor: "roles.name",
-            },
             ],
             []
         );
@@ -58,37 +54,40 @@ const UserList = (props) => {
     return (
         
         <div className="col-md-12 list">
-            <table
-                className="table table-striped table-bordered"
-                {...getTableProps()}
-            >
-                <thead>
-                    {headerGroups.map((headerGroup) => (
-                        <tr {...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map((column) => (
-                                <th {...column.getHeaderProps()}>
-                                    {column.render("Header")}
-                                </th>
-                            ))}
-                        </tr>
-                    ))
-                    }
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                    {rows.map((row, i) => {
-                        prepareRow(row);
-                            return (
-                                <tr {...row.getRowProps()}>
-                                    {row.cells.map((cell) => {
-                                        return (
-                                            <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                                        );
-                                    })}
-                                </tr>
-                            );
-                    })}
-                </tbody>
-            </table>
+            <div className="tbl-container bdr">
+                <table
+                    className="table"
+                    class= "table table-striped"
+                    {...getTableProps()}
+                >
+                    <thead class="table-head">
+                        {headerGroups.map((headerGroup) => (
+                            <tr {...headerGroup.getHeaderGroupProps()}>
+                                {headerGroup.headers.map((column) => (
+                                    <th {...column.getHeaderProps()}>
+                                        {column.render("Header")}
+                                    </th>
+                                ))}
+                            </tr>
+                        ))
+                        }
+                    </thead>
+                    <tbody {...getTableBodyProps()}>
+                        {rows.map((row, i) => {
+                            prepareRow(row);
+                                return (
+                                    <tr {...row.getRowProps()}>
+                                        {row.cells.map((cell) => {
+                                            return (
+                                                <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                            );
+                                        })}
+                                    </tr>
+                                );
+                        })}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 

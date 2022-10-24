@@ -48,8 +48,9 @@ const Login = () => {
         if (checkBtn.current.context._errors.length === 0) {
             AuthService.login(username, password).then(
                 () => {
-                    navigate("/profile");
-                    window.location.reload();
+                    setTimeout(function() {
+                        window.location.href = "/home";
+                    }, 100)
                 },
                 (error) => {
                     const resMessage =
@@ -103,7 +104,11 @@ const Login = () => {
                     </div>
 
                     <div className="form-group">
-                        <button className="btn btn-primary btn-block" disabled={loading}>
+                        <button 
+                            className="btn badge-pill badge-primary btn-block" 
+                            data-toggle="button" 
+                            disabled={loading}
+                            >
                             {loading && (
                                 <span className="spinner-border spinner-border-sm"></span>
                             )}

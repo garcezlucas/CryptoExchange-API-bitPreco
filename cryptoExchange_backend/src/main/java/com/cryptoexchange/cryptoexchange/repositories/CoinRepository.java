@@ -1,5 +1,6 @@
 package com.cryptoexchange.cryptoexchange.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -20,5 +21,7 @@ public interface CoinRepository  extends JpaRepository<Coin, Long>{
     void deleteById(Long id);
 
     Coin getCoinByMarket(String market);
+
+    List<Coin> findCoinByMarket(String market);
 
 }

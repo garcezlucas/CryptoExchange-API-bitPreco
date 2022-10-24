@@ -25,7 +25,7 @@ public class Exchange {
     @Column(name = "exchange_id", columnDefinition = "INTEGER")
     private Long id;
     //  Cria a coluna que armazena a criptomoeda da transação
-    @Column(name = "exchange_market", columnDefinition = "TEXT", nullable = false, length = 25)
+    @Column(name = "exchange_market", columnDefinition = "TEXT", nullable = false, length = 25 )
     private String market;
     //  Cria a coluna que armazena o tipo de transação
     @Column(name = "exchange_exchange", columnDefinition = "TEXT", nullable = false, length = 25)
@@ -33,9 +33,12 @@ public class Exchange {
     //  Cria a coluna que armazena o valor da transação com
     @Column(name = "exchange_value", columnDefinition = "INTEGER", nullable = false, length = 55)
     private Double value;
-    //  Cria a coluna que armazena a quantidade de criptomoedas negociadas
+    //  Cria a coluna que armazena a quantidade de Reais negociadas
     @Column(name = "exchange_amount", columnDefinition = "INTEGER", nullable = false, length = 55)
     private Double amount;
+    // //  Cria a coluna que armazena a quantidade de criptomoedas negociadas
+    @Column(name = "exchange_price", columnDefinition = "DOUBLE PRECISION", nullable = false, length = 55)
+    private Double price;
     //  Cria a coluna que armazena a data da transação
     @Column(name = "exchange_date", columnDefinition = "TEXT", nullable = false, length = 25)
     private String date; 
@@ -49,11 +52,12 @@ public class Exchange {
 
     }
 
-    public Exchange(Long id, String market, String exchange, Double value, Double amount, String date, User user){
+    public Exchange(Long id, String market, String exchange, Double value, Double amount, Double price, String date, User user){
         this.market = market;
         this.exchange = exchange;
         this.value = value;
         this.amount = amount;
+        this.price = price;
         this.date = date;
         this.user = user;
 
@@ -90,6 +94,14 @@ public class Exchange {
     public void setAmount(Double amount) {
         this.amount = amount;
     }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    } 
 
     public String getDate() {
         return date;

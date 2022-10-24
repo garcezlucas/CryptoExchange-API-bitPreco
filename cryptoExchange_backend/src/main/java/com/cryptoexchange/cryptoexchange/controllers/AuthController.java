@@ -98,7 +98,8 @@ public class AuthController{
         //Retorna uma resposta com os dados do usuário
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                         .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
-                        .body(new UserInfoResponse(userDetails.getId(),
+                        .body(new UserInfoResponse(jwtCookie, refreshToken.getToken(),
+                                        userDetails.getId(),
                                         userDetails.getUsername(),
                                         userDetails.getEmail(),
                                         roles));
@@ -121,31 +122,31 @@ public class AuthController{
             return ResponseEntity
                 .badRequest()
                 .body(new MessageResponse("Error: Usuário já existe!"));
-            }
-            // Verifica o email no BD
-            if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        }
+        // Verifica o email no BD
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             // Se o email já existir retorna um erro de email existente
             return ResponseEntity
                 .badRequest()
                 .body(new MessageResponse("Error: Email já está em uso!"));
-            }
+        }
 
             // Cria um novo usuário com requisição de nome de usuário, email, senha e permissão
-            User user = new User(signUpRequest.getUsername(), 
-                    signUpRequest.getEmail(),
-                    encoder.encode(signUpRequest.getPassword()));
-            // Pega a Role inserida pelo usuário
-            Set<String> strRoles = signUpRequest.getRole();
-            // 
-            Set<Role> roles = new HashSet<>();
-            // Verifica se o campo Role do input é nulo
-            if (strRoles == null) {
-            //Se o input for nulo é atribuido a ROLE_USER para o usuário
+        User user = new User(signUpRequest.getUsername(), 
+                signUpRequest.getEmail(),
+                encoder.encode(signUpRequest.getPassword()));
+        // Pega a Role inserida pelo usuário
+        Set<String> strRoles = signUpRequest.getRole();
+        // 
+        Set<Role> roles = new HashSet<>();
+        // Verifica se o campo Role do input é nulo
+        if (strRoles == null) {
+        //Se o input for nulo é atribuido a ROLE_USER para o usuário
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                 // Lança excessão informando que a Role não foi encontrada
                 .orElseThrow(() -> new RuntimeException("Error: Role não encontrada."));
             roles.add(userRole);
-            } else {
+        } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     //Se o input for admin é atribuido a ROLE_ADMIN para o usuário
@@ -172,14 +173,14 @@ public class AuthController{
                     roles.add(userRole);
                     }
             });
-            }
-            // Adiciona uma Role ao usuário
-            user.setRoles(roles);
-            // Salva os dados de user no BD
-            userRepository.save(user);
-            // Retorna uma mensagem de usuário registrado
-            return ResponseEntity.ok(new MessageResponse("Usuário registrado com sucesso!"));
         }
+        // Adiciona uma Role ao usuário
+        user.setRoles(roles);
+        // Salva os dados de user no BD
+        userRepository.save(user);
+        // Retorna uma mensagem de usuário registrado
+        return ResponseEntity.ok(new MessageResponse("Usuário registrado com sucesso!"));
+    }
 
     @PostMapping("/refreshtoken")
     //localhost:8080/api/auth/refreshtoken - POST

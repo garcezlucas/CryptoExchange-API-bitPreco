@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import UserDataService from "../../../services/User.service";
 import { useTable } from "react-table";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
-const BoardUser = (props) => {
+const BoardUser = props => {
     const [users, setUsers] = useState([]);
     const [searchUser, setSearchUser] = useState("");
     const usersRef = useRef();
+    const {id} = useParams()
+    const [successful, setSuccessful] = useState(false);
+    const [message, setMessage] = useState("");
+
 
     const history = useNavigate();
 
@@ -49,9 +53,9 @@ const BoardUser = (props) => {
     const openUser = (rowIndex) => {
         const id = usersRef.current[rowIndex].id;
         history("/editusers/" + id, {
-            state:{
-                id
-            }
+        //     state:{
+        //         id
+        //     }
         });
     };
 
@@ -65,6 +69,12 @@ const BoardUser = (props) => {
         UserDataService.deleteUserById(id)
             .then((response) => {
 
+                // setMessage(response.data.message);
+                // setSuccessful(true);
+
+                // setTimeout(function() {
+                //     window.location.reload();
+                // }, 500)
 
                 let newUsers = [...usersRef.current];
                 newUsers.splice(rowIndex, 1);
@@ -93,11 +103,7 @@ const BoardUser = (props) => {
                 accessor: "email",
             },
             {
-                Header: "Roles",
-                accessor: "roles.name",
-            },
-            {
-                Header: "Actions",
+                Header: "",
                 accessor: "actions",
                 Cell: (props) => {
                     const rowIdx = props.row.id;
@@ -126,50 +132,56 @@ const BoardUser = (props) => {
         prepareRow,
     } = useTable({
         columns,
-        data: users,
+        data: users
+
     });
 
     return (
         <div className="list row">
             <div className="col-md-8">
-                <div className="input-group mb-3">
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Procurar por usuário"
-                        value={searchUser}
-                        onChange={onChangeSearchUser}
-                    />
-                    <div className="input-group-append">
-                        <button
-                        className="btn btn-outline-secondary"
-                        type="button"
-                        onClick={findByUser}
-                        >
-                        Procurar
-                        </button>
+                <div className="search">
+                    <div className="input-group mb-3">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Procurar por usuário"
+                            value={searchUser}
+                            onChange={onChangeSearchUser}
+                        />
+                        <div className="input-group-append">
+                            <button
+                            className="btn btn-outline-secondary"
+                            data-toggle="button"
+                            type="button"
+                            onClick={findByUser}
+                            >
+                            Procurar
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
             <div className="col-md-12 list">
-                <table
-                    className="table table-dark table-striped table-bordered"
-                    {...getTableProps()}
-                >
-                    <thead>
-                        {headerGroups.map((headerGroup) => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map((column) => (
-                                    <th {...column.getHeaderProps()}>
-                                        {column.render("Header")}
-                                    </th>
-                                ))}
-                            </tr>
-                        ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()}>
-                        {rows.map((row, i) => {
-                            prepareRow(row);
+                <div className="tbl-container bdr">
+                    <table
+                        className="table"
+                        class= "table table-striped"
+                        {...getTableProps()}
+                    >
+                        <thead className="table-head">
+                            {headerGroups.map((headerGroup) => (
+                                <tr {...headerGroup.getHeaderGroupProps()}>
+                                    {headerGroup.headers.map((column) => (
+                                        <th {...column.getHeaderProps()}>
+                                            {column.render("Header")}
+                                        </th>
+                                    ))}
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody {...getTableBodyProps()}>
+                            {rows.map((row, i) => {
+                                prepareRow(row);
                                 return (
                                     <tr {...row.getRowProps()}>
                                         {row.cells.map((cell) => {
@@ -179,19 +191,25 @@ const BoardUser = (props) => {
                                         })}
                                     </tr>
                                 );
-                        })}
-                    </tbody>
-                </table>
+                            })}
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
             <div className="col-md-8">
                 <button
-                    className="btn badge-pill badge-info" 
-                    onClick={retrieveUsers}>
+                    className="btn badge-pill badge-info mr-2" 
+                    data-toggle="button"
+                    onClick={retrieveUsers}
+                >
                     Todos Usuários
                 </button>
                 <button
-                    className="btn badge-pill badge-secondary" 
-                    onClick={createUser}>
+                    className="btn badge-pill badge-secondary mr-2" 
+                    data-toggle="button"
+                    onClick={createUser}
+                >
                     Criar novo usuário
                 </button>
             </div>

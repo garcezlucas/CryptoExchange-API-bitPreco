@@ -17,7 +17,7 @@ import com.cryptoexchange.cryptoexchange.payloads.responses.ExchangeResponse;
 // Repositório criado com JPARepository para implementação das imformações no BD
 public interface ExchangeRepository extends JpaRepository<Exchange, Long>{
 
-    @Query(value = "SELECT * FROM exchange c WHERE c.u_id = :u_id", nativeQuery = true)
+    @Query(value = "SELECT * FROM exchange WHERE u_id = :u_id OR u_id IS NULL" , nativeQuery = true)
     List<Exchange> findByUser(@Param("u_id") long id);
 
     List<Exchange> findByExchange(String exchange);

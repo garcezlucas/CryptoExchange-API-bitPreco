@@ -1,6 +1,24 @@
+BODY {background-color: #415A77;}
+
 label {
   display: block;
   margin-top: 10px;
+}
+
+.container-profile{
+  background-color: #1B263B;
+  color: #E0E1DD;
+  padding: 20px 25px 30px;
+  margin: 0 auto 25px;
+  /* margin-top: 50px; */
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 15px;
+  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  width: auto;
+  word-wrap: break-word;
 }
 
 .card-container.card {
@@ -9,16 +27,19 @@ label {
 }
 
 .card {
-  background-color: #f7f7f7;
+  background-color: #778DA9;
   padding: 20px 25px 30px;
   margin: 0 auto 25px;
   margin-top: 50px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
-  border-radius: 2px;
+  border-radius: 15px;
   -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 300px;
+  cursor: pointer;
 }
 
 .profile-img-card {
@@ -31,57 +52,83 @@ label {
   border-radius: 50%;
 }
 
+.container-homepublic{
+  display: flex;
+  flex-direction: inline;
+  padding: 10px;
+}
+
+.jumbotron{
+  background-color: #415A77;
+  padding-top: 20px;
+}
+
 .coin-icon{
-  width: 300px;
-  height: 300px;
+  width: 500px;
+  height: 500px;
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  border-radius: 50%;
+  align-self: flex-end;
+  margin-left: 70px;
   
 }
 
+.bdr {
+  border-radius: 20px;
+  overflow: hidden;
+}
 
-/* .mainContainer {
-  display: flex;
-  flex-direction: row;
-} */
-
-.card{
+.table-head{
+  background-color: #1B263B;
+  color: #E0E1DD; 
   text-align: center;
-  width: 300px;
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 5px;
 }
 
-.card.selected {
-  border: 1px solid cadetblue;
-  background-color: cadetblue;
-  border-radius: 5px
+.table{
+  background-color: #778DA9;
+  color: #0D1B2A;
+  text-align: center;
+  border-color: #0D1B2A;
+  border-radius: 20px;
+  font-weight: bold;
 }
 
-.cardsContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  align-content: center;
-  margin-top: 10%;
-  padding-bottom: 5%;
-  padding-top: 5%;
-  font-size: 18px;
-  border-radius: 5px;
-  border: 1px solid cadetblue;
-  color:dimgray;
+.navbar{
+  background-color: #0D1B2A;
+  
 }
 
-.buy-form-container{
-  display: flex;
-  flex-direction: column;
-  padding-top: 5%;
-  align-items: center;
-  padding-bottom: 5%;
-  border-radius: 5px;
-  border: 1px solid cadetblue;
-  margin-top: 5%;
-  margin-bottom: 5%;
+.navbar-brand{
+  color: #E0E1DD;
+  text-align: center;
+  margin-left: 5px;
+}
+
+.navbar-brand:hover{
+  box-shadow: inset 150px 0 0 0 #1B263B;
+  border-radius: 15px;
+  color: #E0E1DD;
+}
+
+.nav-link{
+  color: #E0E1DD;
+  text-align: center;
+  margin: 5px;
+  
+}
+
+.nav-link:hover {
+  box-shadow: inset 150px 0 0 0 #1B263B;
+  border-radius: 15px;
+  color: #E0E1DD;
+}
+
+.roles{
+  text-align: center;
+}
+
+.search{
+  background-color: #0D1B2A;
+  color: #E0E1DD;
+
 }

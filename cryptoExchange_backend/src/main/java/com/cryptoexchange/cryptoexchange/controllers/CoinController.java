@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 // import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,7 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping ("/api/auth")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Api(value = "API controle de criptomoedas com cotação atualizada")
 public class CoinController {
 
@@ -60,14 +62,14 @@ public class CoinController {
             // Cria uma nova moeda coin
             Coin coin = new Coin(
                 response.getId(),
-                response.getSuccess(),
+                // response.getSuccess(),
                 response.getMarket(),
-                response.getLast(),
-                response.getHigh(),
-                response.getLow(),
-                response.getVol(),
-                response.getAvg(), 
-                response.getVar(),
+                // response.getLast(),
+                // response.getHigh(),
+                // response.getLow(),
+                // response.getVol(),
+                // response.getAvg(), 
+                // response.getVar(),
                 response.getBuy(), 
                 response.getSell(),
                 response.getTimestamp()
@@ -78,14 +80,14 @@ public class CoinController {
 
         } else{
             // Realiza o update das informações da moeda
-            _coin.setSuccess(response.getSuccess());
+            // _coin.setSuccess(response.getSuccess());
             _coin.setMarket(response.getMarket());
-            _coin.setLast(response.getLast());
-            _coin.setHigh(response.getHigh());
-            _coin.setLow(response.getLow());
-            _coin.setVol(response.getVol());
-            _coin.setAvg(response.getAvg());
-            _coin.setVar(response.getVar());
+            // _coin.setLast(response.getLast());
+            // _coin.setHigh(response.getHigh());
+            // _coin.setLow(response.getLow());
+            // _coin.setVol(response.getVol());
+            // _coin.setAvg(response.getAvg());
+            // _coin.setVar(response.getVar());
             _coin.setBuy(response.getBuy());
             _coin.setSell(response.getSell());
             _coin.setTimestamp(response.getTimestamp());
@@ -114,6 +116,27 @@ public class CoinController {
         return new ResponseEntity<List<Coin>>(coinRepository.findAll(), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Buscando lista de cripto por nome", produces = "application/json")
+    // @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
+    //localhost:8080/api/auth/users/?username=bob - GET
+    @GetMapping("/coins/find/{market}")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    public ResponseEntity<List<Coin>>findByName(@PathVariable("market") String market){
+
+        // Busca o usuário no BD através do nome de usuário
+        List<Coin> _coins = coinRepository.findCoinByMarket(market);
+        //Verifica se o usuário é nulo
+        if(_coins == null){
+            // Retorna resposta de usuário não encontrado
+            return new ResponseEntity<List<Coin>>(_coins,HttpStatus.NOT_FOUND);
+        }
+        // Retorna uma lista com as informações do usuário pesquisado
+        return new ResponseEntity<List<Coin>>(_coins, HttpStatus.OK);
+    }
+
     @ApiOperation(value = "Busca uma moeda através de seu Id")
     // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/coins/list/1 - GET
@@ -127,11 +150,32 @@ public class CoinController {
         // verifica se o id é nulo
         if (id == null) {
             // Retorna uma mensagem de moeda não encontrada se o id for nulo
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);   
+            return new ResponseEntity<Optional<Coin>>(coinRepository.findById(id),HttpStatus.NOT_FOUND);   
         }else {
             // Retorna uma moeda definida pelo Id
             return new ResponseEntity<Optional<Coin>>(coinRepository.findById(id), HttpStatus.OK);
         }
+    }
+
+    @ApiOperation(value = "Buscando cripto por nome", produces = "application/json")
+    // @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
+    //localhost:8080/api/auth/users/?username=bob - GET
+    @GetMapping("/coins/{market}")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    public ResponseEntity<Coin>getByName(@PathVariable("market") String market){
+
+        // Busca o usuário no BD através do nome de usuário
+        Coin _coins = coinRepository.getCoinByMarket(market);
+        //Verifica se o usuário é nulo
+        if(_coins == null){
+            // Retorna resposta de usuário não encontrado
+            return new ResponseEntity<Coin>(_coins,HttpStatus.NOT_FOUND);
+        }
+        // Retorna uma lista com as informações do usuário pesquisado
+        return new ResponseEntity<Coin>(_coins, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Atualiza as informações de uma moeda manualmente através de seu Id")
@@ -142,26 +186,28 @@ public class CoinController {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    public ResponseEntity<Coin> update (@PathVariable("id") Long id, @RequestBody Coin coin){
+    public ResponseEntity<?> update (@PathVariable("id") Long id, @RequestBody Coin coin){
 
         // Busca as informações da moeda no BD
         Coin _coin = coinRepository.getCoinById(id);
         
         // Realiza o update das informações da moeda
-        _coin.setSuccess(coin.getSuccess());
+        // _coin.setSuccess(coin.getSuccess());
         _coin.setMarket(coin.getMarket());
-        _coin.setLast(coin.getLast());
-        _coin.setHigh(coin.getHigh());
-        _coin.setLow(coin.getLow());
-        _coin.setVol(coin.getVol());
-        _coin.setAvg(coin.getAvg());
-        _coin.setVar(coin.getVar());
+        // _coin.setLast(coin.getLast());
+        // _coin.setHigh(coin.getHigh());
+        // _coin.setLow(coin.getLow());
+        // _coin.setVol(coin.getVol());
+        // _coin.setAvg(coin.getAvg());
+        // _coin.setVar(coin.getVar());
         _coin.setBuy(coin.getBuy());
         _coin.setSell(coin.getSell());
         _coin.setTimestamp(coin.getTimestamp());
 
+        coinRepository.save(_coin);
+
         // Retorna as novas informações da moeda com status OK
-        return new ResponseEntity<>(coinRepository.save(_coin), HttpStatus.OK);
+        return ResponseEntity.ok(new MessageResponse("Criptomoeda atualizada com sucesso!"));
     }
 
     @ApiOperation(value = "Deleta uma moeda através de seu Id")
@@ -184,5 +230,22 @@ public class CoinController {
             // Retorna uma mensagem de moeda deletada com sucesso
             return ResponseEntity.ok(new MessageResponse("Coin deletada com sucesso!"));
     }
+
+    @ApiOperation(value = "Deleta todas criptomoedas do BD")
+    // @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //localhost:8080/api/auth/coins/delete/1 - DELETE
+    @DeleteMapping(value = "/coins/delete/all")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    public ResponseEntity<?> delete () {
+
+        // Deleta uma transação do BD
+        coinRepository.deleteAll();
+        // Retorna uma mensagem de transação deletada com sucesso
+        return ResponseEntity.ok(new MessageResponse("Criptomoedas deletadas com sucesso!"));
+    }
+
 
 }

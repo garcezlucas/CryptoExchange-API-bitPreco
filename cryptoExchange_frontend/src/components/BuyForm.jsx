@@ -3,6 +3,8 @@ import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
 import { useNavigate } from "react-router-dom";
 
+import Alert from 'react-bootstrap/Alert';
+
 import ExchangeService from "../services/Exchange.service";
 import CoinDataService  from "../services/Coin.service";
 
@@ -16,17 +18,10 @@ const required = (value) => {
     }
 };
 
-const InputBase = ({label, ...props}) => (
-    <>
-        <input type="number" {...props} placeholder={label}/>
-    </>
-)
-
 const BuyForm = () => {
 
 
-    const current = new Date();
-    const date = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+    const date = new Date().toLocaleString();
 
     const form = useRef();
     const checkBtn = useRef();
@@ -129,10 +124,15 @@ const BuyForm = () => {
 
         if (checkBtn.current.context._errors.length === 0) {
             ExchangeService.exchangeInsert(market, exchange, value, amount, price, date ).then(
-                () => {
-                    navigate("/buy");
-                    window.location.reload();
+                (response) => {
+                    setMessage(response.data.message);
+                    setSuccessful(true);
+                    
                 },
+                setTimeout(function() {
+                    window.location.reload();
+                }, 500),
+
                 (error) => {
                     const resMessage =
                         (error.response &&
@@ -168,12 +168,19 @@ const BuyForm = () => {
                                         validations={[required]}
                                     >
                                         <option select = "true" value = "Default" hidden> Selecione a criptomoeda </option>
-                                        <option select = "true" value = "btc"> BTC </option>
-                                        <option select = "true" value = "eth"> ETH </option>
-                                        <option select = "true" value = "ada"> ADA </option>
-
-
-
+                                        <option select = "true" value = "btc"> Bitcoin </option>
+                                        <option select = "true" value = "eth"> Ethereum </option>
+                                        <option select = "true" value = "usdt"> Tether </option>
+                                        <option select = "true" value = "usdc"> USD Coin </option>
+                                        <option select = "true" value = "busd"> Binance USD </option>
+                                        <option select = "true" value = "ada"> Cardano </option>
+                                        <option select = "true" value = "sol"> Solana </option>
+                                        <option select = "true" value = "uni"> Uniswap </option>
+                                        <option select = "true" value = "lunc"> Terra Classic </option>
+                                        <option select = "true" value = "axs"> Axie Infinity </option>
+                                        <option select = "true" value = "cake"> Pancake Swap </option>
+                                        <option select = "true" value = "paxg"> PAX Gold </option>
+                                        <option select = "true" value = "luna"> Terra </option>
                                     </select>
 
                                 </div>
@@ -181,7 +188,7 @@ const BuyForm = () => {
                                 <div className="form-group">
                                     <label>Valor da criptomoeda</label>
                                     <input
-                                        type="number"
+                                        
                                         className="form-control"
                                         name="value"
                                         value={value}
@@ -210,11 +217,11 @@ const BuyForm = () => {
 
                                 <div className="form-group">
                                     <label>Valor Transação</label>
-                                    <InputBase
+                                    <input
                                     type="number"
-                                    className="brl-input"
+                                    className="form-control"
                                     name="amount" 
-                                    label="BRL"
+                                    placeholder="BRL"
                                     value ={amount}
                                     onChange={onChangeAmount}
                                     onClick={handleChange}
@@ -227,8 +234,9 @@ const BuyForm = () => {
                                     <input 
                                         type="number"
                                         className="form-control"
+                                        placeholder="Quantidade de Cripto"
                                         name="price"
-                                        value={total.converted}                             
+                                        value={total.converted}    
                                         disabled label ="true"
                                     />
                                 </div>
@@ -247,7 +255,13 @@ const BuyForm = () => {
                                 
 
                                 <div className="form-group">
-                                    <button className="btn btn-primary btn-block" ref={checkBtn}>Realizar transação</button>
+                                    <button 
+                                        className="btn badge-pill badge-secondary btn-block" 
+                                        data-toggle="button" 
+                                        ref={checkBtn}
+                                    >
+                                        Realizar transação
+                                    </button>
                                 </div>
                             </div>
                         )}
@@ -255,10 +269,12 @@ const BuyForm = () => {
                         {message && (
                             <div className="form-group">
                                 <div
+                                
                                     className={
                                         successful ? "alert alert-success" : "alert alert-danger"
                                     }
                                     role="alert"
+
                                 >
                                     {message}
                                 </div>

@@ -10,6 +10,7 @@ import AuthService from "./services/Auth.service";
 import Login from "./components/authentication/Login";
 import Register from "./components/authentication/Register";
 import Home from "./components/Home";
+import HomePublic from "./components/HomePublic";
 import Profile from "./components/authentication/Profile";
 import BoardPremium from "./components/boards/premium/BoardPremium";
 import BoardPremiumCoins from "./components/boards/premium/BoardPremiumCoin";
@@ -18,17 +19,13 @@ import BoardPremiumUsers from "./components/boards/premium/BoardPremiumUser";
 import BoardAdmin from "./components/boards/admin/BoardAdmin";
 import BoardAdminCoins from "./components/boards/admin/BoardAdminCoin";
 import BoardAdminExchanges from "./components/boards/admin/BoardAdminExchange";
-// import BoardAdminExchanges from "./components/boards/AdminExchangeDemo";
 import BoardAdminUsers from "./components/boards/admin/BoardAdminUser";
 import BoardAdminCreateUSer from "./components/boards/editBoards/CreateUser";
 import BuyForm from "./components/BuyForm";
 import Exchange from "./components/Exchanges";
-// import EditExchanges from "./components/boards/editBoards/EditExchanges";
-import EditExchanges from "./components/EditExchangeDemo";
-import EditCoins from "./components/EditCoinDemo";
-import EditUsers from "./components/EditUserDemo";
-// import EditCoins from "./components/boards/editBoards/EditCoins";
-// import EditUsers from "./components/boards/editBoards/EditUsers";
+import EditExchanges from "./components/boards/editBoards/EditExchanges";
+import EditCoins from "./components/boards/editBoards/EditCoins";
+import EditUsers from "./components/boards/editBoards/EditUsers";
 
 import AlienCoin from "./images/AlienCoin.png"
 
@@ -66,87 +63,93 @@ function App  ()  {
 
   return (
     <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <div className="navbar-brand" href="#">
+      {currentUser && (
+        <nav className="navbar navbar-expand">
           <img src={AlienCoin} width="30" height="30" className="d-inline-block align-center" alt=""/>
-          <Link to={"/"} className="navbar-brand">
-            AlienCoin
-          </Link>
-        </div>
-        <div className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link to={"/home"} className="nav-link">
-              Home
+          <div className="navbar-brand" href="#">
+            <Link to={"/"} className="navbar-brand">
+              LibertyExchange
             </Link>
-          </li>
-
-          {showAdminBoard && (
-            <li className="nav-item">
-              <Link to={"/admin"} className="nav-link">
-                Admin
-              </Link>
-            </li>
-          )}
-
-          {showPremiumBoard && (
-            <li className="nav-item">
-              <Link to={"/premium"} className="nav-link">
-                Premium
-              </Link>
-            </li>
-          )}
-        </div>
-
-        {currentUser && (
+          </div>
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
-              <Link to={"/buy"} className="nav-link">
-                Comprar
-              </Link>
-            </li>
-          
-            <li className="nav-item">
-              <Link to={"/exchange"} className="nav-link">
-                Transações
-              </Link>
-            </li>
-          </div>
-        )}
-
-        {currentUser ? (
-          <div className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to={"/profile"} className="nav-link">
-                {currentUser.username}
-              </Link>
-            </li>
-            <li className="nav-item">
-              <a href="/login" className="nav-link" onClick={logOut}>
-                LogOut
-              </a>
-            </li>
-          </div>
-        ) : (
-          <div className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to={"/login"} className="nav-link">
-                Login
+              <Link to={"/home"} className="nav-link">
+                Home
               </Link>
             </li>
 
-            <li className="nav-item">
-              <Link to={"/register"} className="nav-link">
-                Sign Up
-              </Link>
-            </li>
+            {showAdminBoard && (
+              <li className="nav-item">
+                <Link to={"/admin"} className="nav-link">
+                  Admin
+                </Link>
+              </li>
+            )}
+
+            {showPremiumBoard && (
+              <li className="nav-item">
+                <Link to={"/premium"} className="nav-link">
+                  Premium
+                </Link>
+              </li>
+            )}
           </div>
-        )}
+
+          {currentUser && (
+            <div className="navbar-nav mr-auto">
+              <li className="nav-item">
+                <Link to={"/buy"} className="nav-link">
+                  Comprar
+                </Link>
+              </li>
+            
+              <li className="nav-item">
+                <Link to={"/exchange"} className="nav-link">
+                  Transações
+                </Link>
+              </li>
+            </div>
+          )}
+
+          {currentUser && (
+            <div className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <Link to={"/profile"} className="nav-link">
+                  {currentUser.username}
+                </Link>
+              </li>
+              <li className="nav-item">
+                <a href="/homepublic" className="nav-link" onClick={logOut}>
+                  LogOut
+                </a>
+              </li>
+            </div>
+          ) };
+          {/* // : (
+          //   <div className="navbar-nav ml-auto">
+          //     <li className="nav-item">
+          //       <Link to={"/login"} className="nav-link">
+          //         Login
+          //       </Link>
+          //     </li>
+
+          //     <li className="nav-item">
+          //       <Link to={"/register"} className="nav-link">
+          //         Sign Up
+          //       </Link>
+          //     </li>
+          //   </div>
+          // )} */}
       </nav>
+    )};
+  
+
 
       <div className="container mt-3">
         <Routes>
           <Route exact path={"/"} element={<Home />} />
           <Route exact path={"/home"} element={<Home />} />
+          <Route exact path={"/homepublic"} element={<HomePublic />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/profile" element={<Profile />} />

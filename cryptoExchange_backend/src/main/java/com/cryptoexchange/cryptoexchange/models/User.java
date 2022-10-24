@@ -99,7 +99,10 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-    
+
+    public Long getUsername(Long id2) {
+        return null;
+    }
     
 }
 

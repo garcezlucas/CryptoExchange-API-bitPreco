@@ -91,6 +91,9 @@ const Register = (props) => {
                     setMessage(response.data.message);
                     setSuccessful(true);
                 },
+                setTimeout(function() {
+                    window.location.href = "/adminusers";
+                }, 500),
                 (error) => {
                     const resMessage =
                         (error.response &&
@@ -167,7 +170,12 @@ const Register = (props) => {
                             </div>
 
                             <div className="form-group">
-                                <button className="btn btn-primary btn-block">Registrar</button>
+                                <button 
+                                    className="btn badge-pill badge-primary btn-block" 
+                                    data-toggle="button"
+                                >
+                                    Registrar
+                                </button>
                             </div>
                         </div>
                     )}
