@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User getUserById(Long id);
 
     User findById(long id);
-
+    
     Optional<User> getByUsername(String username);
 
 }

@@ -54,17 +54,30 @@ label {
 .container-homepublic{
   display: flex;
   flex-direction: inline;
-  padding: 0%;
+  padding: 5%;
 }
 
 .container-home{
   display: flex;
   flex-direction: inline;
+  padding: 5%;
 }
 
-.container-text{
+.card-text{
   text-align: center;
   color: #E0E1DD;
+}
+
+@media(max-width: 767px) {
+  .display-4 {
+      font-size:2em;
+  }
+}
+
+@media(max-width: 767px) {
+  .may-4 {
+      font-size:1em;
+  }
 }
 
 .jumbotron{
@@ -82,9 +95,9 @@ label {
   display: block;
   border-radius: 50%;
   align-self: flex-end;
-  margin-left: 5%; 
+  margin-left: 20%; 
   margin-right: 2%;
-  margin-top: 0%;
+  margin-top: 5%;
   margin-bottom: 2%;
 }
 
@@ -100,7 +113,7 @@ label {
   display: block;
   border-radius: 50%;
   align-self: flex-end;
-  margin-left: 5%; 
+  margin-left: 15%; 
   margin-right: 2%;
   margin-top: 0%;
   margin-bottom: 2%;
@@ -117,7 +130,7 @@ label {
   height: 100%;
   display: block;
   border-radius: 50%;
-  margin-left: 4%;
+  margin-left: 20%;
   margin-top: 2%;
   margin-bottom: 2%;
 }
@@ -133,7 +146,7 @@ label {
   height: 95%;
   display: block;
   border-radius: 50%;
-  margin-left: 4%;
+  margin-left: 20%;
   margin-top: 2%;
   margin-bottom: 2%;
 }
