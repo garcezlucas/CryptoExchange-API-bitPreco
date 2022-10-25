@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import UserDataService from "../../../services/User.service";
 import { useTable } from "react-table";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 const BoardUser = props => {
     const [users, setUsers] = useState([]);
     const [searchUser, setSearchUser] = useState("");
     const usersRef = useRef();
-    const {id} = useParams()
-    const [successful, setSuccessful] = useState(false);
-    const [message, setMessage] = useState("");
-
 
     const history = useNavigate();
 
@@ -52,11 +48,7 @@ const BoardUser = props => {
 
     const openUser = (rowIndex) => {
         const id = usersRef.current[rowIndex].id;
-        history("/editusers/" + id, {
-        //     state:{
-        //         id
-        //     }
-        });
+        history("/editusers/" + id);
     };
 
     const createUser = () => {
@@ -68,13 +60,6 @@ const BoardUser = props => {
 
         UserDataService.deleteUserById(id)
             .then((response) => {
-
-                // setMessage(response.data.message);
-                // setSuccessful(true);
-
-                // setTimeout(function() {
-                //     window.location.reload();
-                // }, 500)
 
                 let newUsers = [...usersRef.current];
                 newUsers.splice(rowIndex, 1);
@@ -143,14 +128,14 @@ const BoardUser = props => {
                     <div className="input-group mb-3">
                         <input
                             type="text"
-                            className="form-control"
+                            className="search-bar"
                             placeholder="Procurar por usuário"
                             value={searchUser}
                             onChange={onChangeSearchUser}
                         />
                         <div className="input-group-append">
                             <button
-                            className="btn btn-outline-secondary"
+                            className="search-button"
                             data-toggle="button"
                             type="button"
                             onClick={findByUser}
@@ -161,11 +146,10 @@ const BoardUser = props => {
                     </div>
                 </div>
             </div>
-            <div className="col-md-12 list">
-                <div className="tbl-container bdr">
+            <div className="table-bdr">
+                <div className="table-responsive">
                     <table
-                        className="table"
-                        class= "table table-striped"
+                        className= "table table-striped table-hover"
                         {...getTableProps()}
                     >
                         <thead className="table-head">
@@ -199,14 +183,14 @@ const BoardUser = props => {
 
             <div className="col-md-8">
                 <button
-                    className="btn badge-pill badge-info mr-2" 
+                    className="btn-all mr-2" 
                     data-toggle="button"
                     onClick={retrieveUsers}
                 >
                     Todos Usuários
                 </button>
                 <button
-                    className="btn badge-pill badge-secondary mr-2" 
+                    className="btn-new mr-2" 
                     data-toggle="button"
                     onClick={createUser}
                 >

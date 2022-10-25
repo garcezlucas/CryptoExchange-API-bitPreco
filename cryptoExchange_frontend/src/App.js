@@ -64,10 +64,10 @@ function App  ()  {
   return (
     <div>
       {currentUser && (
-        <nav className="navbar navbar-expand">
+        <nav className="navbar navbar-expand-lg">
           <img src={AlienCoin} width="30" height="30" className="d-inline-block align-center" alt=""/>
           <div className="navbar-brand" href="#">
-            <Link to={"/"} className="navbar-brand">
+            <Link to={"/home"} className="navbar-brand">
               LibertyExchange
             </Link>
           </div>
@@ -125,21 +125,6 @@ function App  ()  {
               </li>
             </div>
           ) };
-          {/* // : (
-          //   <div className="navbar-nav ml-auto">
-          //     <li className="nav-item">
-          //       <Link to={"/login"} className="nav-link">
-          //         Login
-          //       </Link>
-          //     </li>
-
-          //     <li className="nav-item">
-          //       <Link to={"/register"} className="nav-link">
-          //         Sign Up
-          //       </Link>
-          //     </li>
-          //   </div>
-          // )} */}
       </nav>
     )};
   
@@ -147,7 +132,7 @@ function App  ()  {
 
       <div className="container mt-3">
         <Routes>
-          <Route exact path={"/"} element={<Home />} />
+          <Route exact path={"/"} element={<HomePublic />} />
           <Route exact path={"/home"} element={<Home />} />
           <Route exact path={"/homepublic"} element={<HomePublic />} />
           <Route exact path="/login" element={<Login />} />

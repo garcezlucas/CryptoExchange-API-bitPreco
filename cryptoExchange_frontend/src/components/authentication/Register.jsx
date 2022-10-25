@@ -3,7 +3,6 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
-import { useNavigate } from 'react-router-dom';
 
 import AuthService from "../../services/Auth.service";
 
@@ -50,8 +49,6 @@ const vpassword = (value) => {
 const Register = (props) => {
     const form = useRef();
     const checkBtn = useRef();
-    
-    const history = useNavigate();
 
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
@@ -90,7 +87,7 @@ const Register = (props) => {
                 },
                 setTimeout(function() {
                     window.location.href = "/login";
-                }, 500),
+                }, 1000),
                 (error) => {
                     const resMessage =
                         (error.response &&
@@ -155,7 +152,7 @@ const Register = (props) => {
 
                             <div className="form-group">
                                 <button 
-                                    className="btn badge-pill badge-primary btn-block" 
+                                    className="btn-new mr-2" 
                                     data-toggle="button"
                                 >
                                     Registrar

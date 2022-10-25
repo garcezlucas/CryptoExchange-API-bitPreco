@@ -9,17 +9,17 @@ const Profile = () => {
             <header 
                 className="jumbotron"
                 >
-                <h3>
+                <h3 className="title-profile">
                     <strong>{currentUser.username}</strong> Perfil
                 </h3>
             </header>
             <p>
-                <strong>Token:</strong> {currentUser.accessToken.value.substring(0, 20)} ...{" "}
-                {currentUser.accessToken.value.substr(currentUser.accessToken.length - 20)}
+                <strong>Token: </strong> 
+                {currentUser.accessToken.value.substr(currentUser.accessToken)}
             </p>
             <p>
-                <strong>Refresh Token:</strong> {currentUser.refreshToken.substring(0, 20)} ...{" "}
-                {currentUser.refreshToken.substr(currentUser.refreshToken.length - 20)}
+                <strong>Refresh Token: </strong>
+                {currentUser.refreshToken.substr(currentUser.refreshToken)}
             </p>
             <p>
                 <strong>Id:</strong> {currentUser.id}

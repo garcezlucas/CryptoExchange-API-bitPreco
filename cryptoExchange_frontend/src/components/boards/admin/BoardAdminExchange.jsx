@@ -3,13 +3,13 @@ import ExchangeDataService from "../../../services/Exchange.service";
 import { useTable } from "react-table";
 import { useNavigate } from 'react-router-dom';
 
-const BoardAdmin = (props) => {
+const BoardAdmin = props => {
     const [exchanges, setExchanges] = useState([]);
     const [searchExchange, setSearchExchange] = useState("");
     const exchangesRef = useRef();
 
     const history = useNavigate();
-    
+
     exchangesRef.current = exchanges;
 
     useEffect(() => {
@@ -58,11 +58,7 @@ const BoardAdmin = (props) => {
 
     const openExchange = (rowIndex) => {
         const id = exchangesRef.current[rowIndex].id;
-        history("/editexchanges/" + id, {
-            state:{
-                id
-            }
-        });
+        history("/editexchanges/" + id);
 
     };
 
@@ -71,7 +67,6 @@ const BoardAdmin = (props) => {
 
         ExchangeDataService.deleteExchangeById(id)
             .then((response) => {
-
 
                 let newExchanges = [...exchangesRef.current];
                 newExchanges.splice(rowIndex, 1);
@@ -150,14 +145,14 @@ const BoardAdmin = (props) => {
                 <div className="input-group mb-3">
                     <input
                         type="text"
-                        className="form-control"
+                        className="search-bar"
                         placeholder="Procurar por Transações"
                         value={searchExchange}
                         onChange={onChangeSearchExchange}
                     />
                     <div className="input-group-append">
                         <button
-                        className="btn btn-outline-secondary"
+                        className="search-button"
                         data-toggle="button"
                         type="button"
                         onClick={findByExchange}
@@ -167,11 +162,10 @@ const BoardAdmin = (props) => {
                     </div>
                 </div>
             </div>
-            <div className="col-md-12 list">
-                <div className="tbl-container bdr">
+            <div className="table-bdr">
+                <div className="table-responsive">
                     <table
-                        className="table"
-                        class= "table table-striped "
+                        className= "table table-striped table-hover"
                         {...getTableProps()}
                     >
                         <thead class="table-head">
@@ -205,14 +199,14 @@ const BoardAdmin = (props) => {
 
             <div className="col-md-8">
                 <button
-                    className="btn badge-pill badge-danger mr-2" 
+                    className="btn-delete mr-2" 
                     data-toggle="button"
                     onClick={removeAllExchanges}
                 >
                     Deletar Transações
                 </button>
                 <button 
-                    className="btn badge-pill badge-info mr-2" 
+                    className="btn-all mr-2" 
                     data-toggle="button"
                     onClick={retrieveExchanges}
                 >

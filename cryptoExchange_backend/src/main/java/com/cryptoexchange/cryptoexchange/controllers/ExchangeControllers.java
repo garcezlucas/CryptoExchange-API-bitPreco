@@ -93,7 +93,7 @@ public class ExchangeControllers {
             // Retorna uma mensagem de moeda não encontrada se o id for nulo
             return new ResponseEntity<Optional<Exchange>>(exchangeRepository.findById(id),HttpStatus.NOT_FOUND);   
         }else {
-            // Retorna uma moeda definida pelo Id
+            // Retorna uma transação definida pelo Id
             return new ResponseEntity<Optional<Exchange>>(exchangeRepository.findById(id), HttpStatus.OK);
         }
     }
@@ -106,13 +106,13 @@ public class ExchangeControllers {
         @ApiResponse(code = 500, message = "Internal Server Error")
     })    
     public ResponseEntity<List<Exchange>> getByUser(@PathVariable("id") long id){
-
+        // Busca a transação no BD através do Id
         List<Exchange> _exchanges = exchangeRepository.findByUser(id);
-
+        // Verifica se a transação está vazia
         if(_exchanges.isEmpty()){
             return new ResponseEntity<List<Exchange>>(_exchanges, HttpStatus.NOT_FOUND);
         }
-
+        // Retorna uma lista com as transações pelo Id do usuário
         return new ResponseEntity<List<Exchange>>(_exchanges, HttpStatus.OK);
 
     }
@@ -187,7 +187,7 @@ public class ExchangeControllers {
         }   
 
         // Retorna uma mensagem de transação deletada com sucesso
-        return ResponseEntity.ok(new MessageResponse("Transação deletado com sucesso!"));
+        return ResponseEntity.ok(new MessageResponse("Transação deletada com sucesso!"));
     }
 
     @ApiOperation(value = "Deleta todas transações do BD")

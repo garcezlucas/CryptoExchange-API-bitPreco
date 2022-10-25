@@ -13,7 +13,7 @@ import com.cryptoexchange.cryptoexchange.payloads.responses.CoinResponse;
 
 public interface CoinInterface {
 
-    //Obter moeda com base no código
+    //Obter criptomoeda com base no código
     @GetMapping("{market}/ticker")
     CoinResponse getCoinByCoin(@PathVariable("market") String market);
 

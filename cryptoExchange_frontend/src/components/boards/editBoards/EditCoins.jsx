@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import CoinDataService from "../../../services/Coin.service";
 import { withRouter } from "../../../common/with-router";
-import { useNavigate } from 'react-router-dom';
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
@@ -15,7 +14,6 @@ const required = (value) => {
         );
     }
 };
-
 
 const EditCoins = props => {
 
@@ -35,8 +33,6 @@ const EditCoins = props => {
     const [currentCoin, setCurrentCoin] = useState(initialCoinstate);
     const [message, setMessage] = useState("");
     const [successful, setSuccessful] = useState(false);
-
-    const history = useNavigate();
 
     useEffect(() => {
         getCoin(
@@ -67,7 +63,7 @@ const EditCoins = props => {
         })
         setTimeout(function() {
             window.location.href = "/admincoins";
-        }, 500)
+        }, 1000)
         .catch(e => {
             console.log(e);
         });
@@ -79,19 +75,12 @@ const EditCoins = props => {
         setMessage("");
         setSuccessful(false);
 
-        // form.current.validateAll();
-
         if (checkBtn.current.context._errors.length === 0) {
             CoinDataService.updateCoinById(currentCoin.id, currentCoin).then(
                 (response) => {
                     setMessage(response.data.message);
                     setSuccessful(true);
-
                 },
-                
-                setTimeout(function() {
-                    window.location.href = "/admincoins";
-                }, 500),
 
                 (error) => {
                     const resMessage =
@@ -103,7 +92,11 @@ const EditCoins = props => {
 
                     setMessage(resMessage);
                     setSuccessful(false);
-                }
+                },
+                
+                setTimeout(function() {
+                    window.location.href = "/admincoins";
+                }, 1000)
             );
         }
     };
@@ -122,7 +115,7 @@ const EditCoins = props => {
                                     name="market"
                                     value={currentCoin.market}
                                     onChange={handleInputChange}
-                                //     validations={required}
+                                    validations={[required]}
                                 />
                             </div>
 
@@ -134,7 +127,7 @@ const EditCoins = props => {
                                     name="buy"
                                     value={currentCoin.buy}
                                     onChange={handleInputChange}
-                                    // validations={required}
+                                    validations={[required]}
                                 />
                             </div>
                                 
@@ -146,7 +139,7 @@ const EditCoins = props => {
                                     name="sell"
                                     value={currentCoin.sell}
                                     onChange={handleInputChange}
-                                    // validations={required}
+                                    validations={[required]}
                                 />
                             </div>
                                 
@@ -164,7 +157,7 @@ const EditCoins = props => {
 
                             <div>
                                 <button 
-                                    className="btn badge-pill badge-danger mr-2" 
+                                    className="btn-delete mr-2" 
                                     data-toggle="button" 
                                     onClick={deleteCoin}
                                 >
@@ -172,7 +165,7 @@ const EditCoins = props => {
                                 </button>
 
                                 <button
-                                    className="btn badge-pill badge-success mr-2" 
+                                    className="btn-success mr-2"  
                                     data-toggle="button"
                                 >
                                     Atualizar

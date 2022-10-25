@@ -42,7 +42,7 @@ public class CoinController {
     @Autowired
     private CoinRepository coinRepository;
 
-    @ApiOperation(value="Cria uma nova moeda")
+    @ApiOperation(value="Cria uma nova criptomoeda")
     // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/btc-brl/ticket - GET
     @GetMapping("/{market}/ticker")
@@ -54,12 +54,12 @@ public class CoinController {
 
         //Buscando resultado da API do bitPreco
         CoinResponse response = coinInterface.getCoinByCoin(market);
-        // Busca a moeda no BD
+        // Busca a criptomoeda no BD
         Coin _coin = coinRepository.getCoinByMarket(market);
 
-        // Verifica se a busca da moeda no BD retornou um valor igual de nulo
+        // Verifica se a busca da criptomoeda no BD retornou um valor igual de nulo
         if (_coin == null){
-            // Cria uma nova moeda coin
+            // Cria uma nova criptomoeda coin
             Coin coin = new Coin(
                 response.getId(),
                 // response.getSuccess(),
@@ -75,11 +75,11 @@ public class CoinController {
                 response.getTimestamp()
             );
 
-            // Salva a moeda no BD
+            // Salva a criptomoeda no BD
             coinRepository.save(coin);
 
         } else{
-            // Realiza o update das informações da moeda
+            // Realiza o update das informações da criptomoeda
             // _coin.setSuccess(response.getSuccess());
             _coin.setMarket(response.getMarket());
             // _coin.setLast(response.getLast());
@@ -92,17 +92,17 @@ public class CoinController {
             _coin.setSell(response.getSell());
             _coin.setTimestamp(response.getTimestamp());
 
-            // Salva as novas informações da moeda
+            // Salva as novas informações da criptomoeda
             coinRepository.save(_coin);
         }
 
-        // Retorna a moeda no corpo da requisição 
+        // Retorna a criptomoeda no corpo da requisição 
         return response.getMarket() != null ? ResponseEntity.ok().body(response)
         : ResponseEntity.notFound().build();
         
     }
 
-    @ApiOperation(value = "Lista todas as moedas")
+    @ApiOperation(value = "Lista todas as criptomoeda")
     // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/coins?list/all - GET
     @GetMapping(value = "/coins/list/all")
@@ -112,11 +112,11 @@ public class CoinController {
     })
     public ResponseEntity<List<Coin>> listCoins(){
         
-        // Retorna uma lista com todas as moedas
+        // Retorna uma lista com todas as criptomoeda
         return new ResponseEntity<List<Coin>>(coinRepository.findAll(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Buscando lista de cripto por nome", produces = "application/json")
+    @ApiOperation(value = "Buscando lista de criptomoeda por nome", produces = "application/json")
     // @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/users/?username=bob - GET
     @GetMapping("/coins/find/{market}")
@@ -126,18 +126,18 @@ public class CoinController {
     })
     public ResponseEntity<List<Coin>>findByName(@PathVariable("market") String market){
 
-        // Busca o usuário no BD através do nome de usuário
+        // Busca o usuário no BD através do nome da criptomoeda
         List<Coin> _coins = coinRepository.findCoinByMarket(market);
-        //Verifica se o usuário é nulo
+        //Verifica se a criptomoeda é nula
         if(_coins == null){
-            // Retorna resposta de usuário não encontrado
+            // Retorna resposta da criptomoeda não encontrada
             return new ResponseEntity<List<Coin>>(_coins,HttpStatus.NOT_FOUND);
         }
-        // Retorna uma lista com as informações do usuário pesquisado
+        // Retorna uma lista com as informações da criptomoeda pesquisada
         return new ResponseEntity<List<Coin>>(_coins, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Busca uma moeda através de seu Id")
+    @ApiOperation(value = "Busca uma criptomoeda através de seu Id")
     // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/coins/list/1 - GET
     @GetMapping(value = "/coins/list/{id}")
@@ -149,15 +149,15 @@ public class CoinController {
 
         // verifica se o id é nulo
         if (id == null) {
-            // Retorna uma mensagem de moeda não encontrada se o id for nulo
+            // Retorna uma mensagem de criptomoeda não encontrada se o id for nulo
             return new ResponseEntity<Optional<Coin>>(coinRepository.findById(id),HttpStatus.NOT_FOUND);   
         }else {
-            // Retorna uma moeda definida pelo Id
+            // Retorna uma criptomoeda definida pelo Id
             return new ResponseEntity<Optional<Coin>>(coinRepository.findById(id), HttpStatus.OK);
         }
     }
 
-    @ApiOperation(value = "Buscando cripto por nome", produces = "application/json")
+    @ApiOperation(value = "Buscando criptomoeda por nome", produces = "application/json")
     // @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/users/?username=bob - GET
     @GetMapping("/coins/{market}")
@@ -167,18 +167,18 @@ public class CoinController {
     })
     public ResponseEntity<Coin>getByName(@PathVariable("market") String market){
 
-        // Busca o usuário no BD através do nome de usuário
+        // Busca o usuário no BD através do nome da criptomoeda
         Coin _coins = coinRepository.getCoinByMarket(market);
-        //Verifica se o usuário é nulo
+        //Verifica se a criptomoeda é nula
         if(_coins == null){
-            // Retorna resposta de usuário não encontrado
+            // Retorna resposta da criptomoeda não encontrado
             return new ResponseEntity<Coin>(_coins,HttpStatus.NOT_FOUND);
         }
-        // Retorna uma lista com as informações do usuário pesquisado
+        // Retorna uma lista com as informações da criptomoeda pesquisada
         return new ResponseEntity<Coin>(_coins, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Atualiza as informações de uma moeda manualmente através de seu Id")
+    @ApiOperation(value = "Atualiza as informações de uma criptomoeda manualmente através de seu Id")
     // @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/coins/update/1 - PUT
     @PutMapping("/coins/update/{id}")
@@ -188,10 +188,10 @@ public class CoinController {
     })
     public ResponseEntity<?> update (@PathVariable("id") Long id, @RequestBody Coin coin){
 
-        // Busca as informações da moeda no BD
+        // Busca as informações da criptomoeda no BD
         Coin _coin = coinRepository.getCoinById(id);
         
-        // Realiza o update das informações da moeda
+        // Realiza o update das informações da criptomoeda
         // _coin.setSuccess(coin.getSuccess());
         _coin.setMarket(coin.getMarket());
         // _coin.setLast(coin.getLast());
@@ -206,11 +206,11 @@ public class CoinController {
 
         coinRepository.save(_coin);
 
-        // Retorna as novas informações da moeda com status OK
+        // Retorna as novas informações da criptomoeda com status OK
         return ResponseEntity.ok(new MessageResponse("Criptomoeda atualizada com sucesso!"));
     }
 
-    @ApiOperation(value = "Deleta uma moeda através de seu Id")
+    @ApiOperation(value = "Deleta uma criptomoeda através de seu Id")
     // @PreAuthorize("hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/coins/delete/1 - DELETE
     @DeleteMapping(value = "/coins/delete/{id}")
@@ -227,8 +227,8 @@ public class CoinController {
             //Retorna uma resposta de não encontrado caso o id seje nulo
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);   
         }
-            // Retorna uma mensagem de moeda deletada com sucesso
-            return ResponseEntity.ok(new MessageResponse("Coin deletada com sucesso!"));
+            // Retorna uma mensagem de criptomoeda deletada com sucesso
+            return ResponseEntity.ok(new MessageResponse("Criptomoeda deletada com sucesso!"));
     }
 
     @ApiOperation(value = "Deleta todas criptomoedas do BD")
@@ -243,7 +243,7 @@ public class CoinController {
 
         // Deleta uma transação do BD
         coinRepository.deleteAll();
-        // Retorna uma mensagem de transação deletada com sucesso
+        // Retorna uma mensagem de criptomoeda deletada com sucesso
         return ResponseEntity.ok(new MessageResponse("Criptomoedas deletadas com sucesso!"));
     }
 

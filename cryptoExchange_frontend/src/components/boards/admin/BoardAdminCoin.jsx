@@ -3,14 +3,12 @@ import CoinDataService from "../../../services/Coin.service";
 import { useTable } from "react-table";
 import { useNavigate } from 'react-router-dom';
 
-const BoardAdmin = (props) => {
+const BoardAdmin = props => {
     const [coins, setCoins] = useState([]);
     const [searchCoin, setSearchCoin] = useState("");
     const coinsRef = useRef();
 
     const history = useNavigate();
-    
-
 
     coinsRef.current = coins;
 
@@ -145,14 +143,14 @@ const BoardAdmin = (props) => {
                 <div className="input-group mb-3">
                     <input
                         type="text"
-                        className="form-control"
+                        className="search-bar"
                         placeholder="Procurar por criptomoeda"
                         value={searchCoin}
                         onChange={onChangeSearchCoin}
                     />
                     <div className="input-group-append">
                         <button
-                        className="btn btn-outline-secondary"
+                        className="search-button"
                         data-toggle="button"
                         type="button"
                         onClick={findByCoin}
@@ -162,11 +160,10 @@ const BoardAdmin = (props) => {
                     </div>
                 </div>
             </div>
-            <div className="col-md-12 list">
-                <div className="tbl-container bdr">
+            <div className="table-bdr">
+                <div className="table-responsive">
                     <table
-                        className="table"
-                        class= "table tabletable-striped"
+                        className= "table table-striped table-hover"
                         {...getTableProps()}
                     >
                         <thead class="table-head">
@@ -200,14 +197,14 @@ const BoardAdmin = (props) => {
 
             <div className="col-md-8">
                 <button 
-                    className="btn badge-pill badge-danger mr-2"  
+                    className="btn-delete mr-2"  
                     data-toggle="button"
                     onClick={removeAllCoins}
                 >
                     Deletar Criptomoedas
                 </button>
                 <button 
-                    className="btn badge-pill badge-info mr-2" 
+                    className="btn-all mr-2" 
                     data-toggle="button"
                     onClick={retrieveCoins}
                 >

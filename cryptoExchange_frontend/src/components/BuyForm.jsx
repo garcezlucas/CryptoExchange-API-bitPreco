@@ -1,9 +1,6 @@
-import { useState, useRef, useEffect, refresh } from "react";
+import { useState, useRef, useEffect } from "react";
 import Form from "react-validation/build/form";
 import CheckButton from "react-validation/build/button";
-import { useNavigate } from "react-router-dom";
-
-import Alert from 'react-bootstrap/Alert';
 
 import ExchangeService from "../services/Exchange.service";
 import CoinDataService  from "../services/Coin.service";
@@ -39,11 +36,6 @@ const BuyForm = () => {
     
     const [successful, setSuccessful] = useState(false);
     const [message, setMessage] = useState("");
-
-    const navigate = useNavigate();
-
-    
-
 
     useEffect(() => {
         if (exchange !== "venda") {
@@ -131,7 +123,7 @@ const BuyForm = () => {
                 },
                 setTimeout(function() {
                     window.location.reload();
-                }, 500),
+                }, 1000),
 
                 (error) => {
                     const resMessage =
@@ -256,7 +248,7 @@ const BuyForm = () => {
 
                                 <div className="form-group">
                                     <button 
-                                        className="btn badge-pill badge-secondary btn-block" 
+                                        className="btn-success mr-2" 
                                         data-toggle="button" 
                                         ref={checkBtn}
                                     >

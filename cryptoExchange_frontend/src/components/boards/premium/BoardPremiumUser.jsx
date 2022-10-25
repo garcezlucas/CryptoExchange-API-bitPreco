@@ -53,11 +53,10 @@ const UserList = (props) => {
 
     return (
         
-        <div className="col-md-12 list">
-            <div className="tbl-container bdr">
+        <div className="table-bdr">
+            <div className="table-responsive">
                 <table
-                    className="table"
-                    class= "table table-striped"
+                    className="table table-striped table-hover"
                     {...getTableProps()}
                 >
                     <thead class="table-head">

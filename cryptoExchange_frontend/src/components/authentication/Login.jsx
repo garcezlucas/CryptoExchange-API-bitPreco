@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
@@ -25,8 +24,6 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
-    const navigate = useNavigate();
-
     const onChangeUsername = (e) => {
         const username = e.target.value;
         setUsername(username);
@@ -50,7 +47,7 @@ const Login = () => {
                 () => {
                     setTimeout(function() {
                         window.location.href = "/home";
-                    }, 100)
+                    }, 1000)
                 },
                 (error) => {
                     const resMessage =
@@ -105,7 +102,7 @@ const Login = () => {
 
                     <div className="form-group">
                         <button 
-                            className="btn badge-pill badge-primary btn-block" 
+                            className="btn-new mr-2" 
                             data-toggle="button" 
                             disabled={loading}
                             >

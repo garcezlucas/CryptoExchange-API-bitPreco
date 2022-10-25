@@ -93,7 +93,7 @@ const Register = (props) => {
                 },
                 setTimeout(function() {
                     window.location.href = "/adminusers";
-                }, 500),
+                }, 1000),
                 (error) => {
                     const resMessage =
                         (error.response &&
@@ -171,7 +171,7 @@ const Register = (props) => {
 
                             <div className="form-group">
                                 <button 
-                                    className="btn badge-pill badge-primary btn-block" 
+                                    className="btn-new mr-2" 
                                     data-toggle="button"
                                 >
                                     Registrar

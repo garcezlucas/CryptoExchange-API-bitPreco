@@ -47,11 +47,9 @@ const vpassword = (value) => {
 };
 
 const EditUsers = props => {
-    
+
     const form = useRef();
     const checkBtn = useRef();
-
-    // const currentUsers = UserDataService.roles();
 
     const initialUserstate = {
         id: null,
@@ -94,7 +92,7 @@ const EditUsers = props => {
         })
         setTimeout(function() {
             window.location.href = "/adminusers";
-        }, 500)
+        }, 1000)
         .catch(e => {
             console.log(e);
         });
@@ -114,10 +112,7 @@ const EditUsers = props => {
                     setMessage(response.data.message);
                     setSuccessful(true);
                 },
-                setTimeout(function() {
-                    window.location.href = "/adminusers";
-                }, 500),
-
+                
                 (error) => {
                     const resMessage =
                         (error.response &&
@@ -128,7 +123,11 @@ const EditUsers = props => {
 
                     setMessage(resMessage);
                     setSuccessful(false);
-                }
+                },
+                setTimeout(function() {
+                    window.location.href = "/adminusers";
+                }, 1000)
+
             );
         }
     };
@@ -187,7 +186,7 @@ const EditUsers = props => {
 
                             <div>
                                 <button 
-                                    className="btn badge-pill badge-danger mr-2"
+                                    className="btn-delete mr-2" 
                                     data-toggle="button" 
                                     onClick={deleteUser}
                                 >
@@ -195,7 +194,7 @@ const EditUsers = props => {
                                 </button>
 
                                 <button
-                                    className="btn badge-pill badge-success mr-2" 
+                                    className="btn-success mr-2" 
                                     data-toggle="button"
                                 >
                                     Atualizar

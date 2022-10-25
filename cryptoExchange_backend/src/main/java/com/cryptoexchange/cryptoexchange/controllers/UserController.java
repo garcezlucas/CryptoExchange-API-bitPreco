@@ -59,7 +59,7 @@ public class UserController{
     })
     public ResponseEntity<List<User>> listUsers(){
         
-        // Retorna uma lista com todas as moedas
+        // Retorna uma lista com todas os usuários
         return new ResponseEntity<List<User>>(userRepository.findAll(), HttpStatus.OK);
     }
 
@@ -115,7 +115,7 @@ public class UserController{
     })
     public ResponseEntity<?> updateById(@PathVariable("id") Long id, @Valid @RequestBody User user) {
         
-        // Busca o usuário no BD atravpes do Id
+        // Busca o usuário no BD através do Id
         User _users = userRepository.getUserById(id);
 
 
@@ -155,7 +155,7 @@ public class UserController{
     })
     public ResponseEntity<?> delete (@PathVariable("id") Long id) {
 
-        // Deleta uma moeda do BD através do ID
+        // Deleta um usuário do BD através do ID
         userRepository.deleteById(id);
         // refreshTokenRepository.deleteByUser(id);
         //Verifica se o id é nulo

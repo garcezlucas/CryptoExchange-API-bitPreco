@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import ExchangeDataService from "../../../services/Exchange.service";
 import { withRouter } from "../../../common/with-router";
-import { useNavigate } from 'react-router-dom';
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
@@ -37,8 +36,6 @@ const EditExchanges = props => {
     const [message, setMessage] = useState("");
     const [successful, setSuccessful] = useState(false);
 
-    const history = useNavigate();
-
     useEffect(() => {
         getExchange(
             props.router.params.id
@@ -68,7 +65,7 @@ const EditExchanges = props => {
         })
         setTimeout(function() {
             window.location.href = "/adminexchanges";
-        }, 500)
+        }, 1000)
         .catch(e => {
             console.log(e);
         });
@@ -89,10 +86,6 @@ const EditExchanges = props => {
                     setSuccessful(true);
 
                 },
-                
-                setTimeout(function() {
-                    window.location.href = "/adminexchanges";
-                }, 500),
 
                 (error) => {
                     const resMessage =
@@ -104,7 +97,10 @@ const EditExchanges = props => {
 
                     setMessage(resMessage);
                     setSuccessful(false);
-                }
+                },
+                setTimeout(function() {
+                    window.location.href = "/adminexchanges";
+                }, 1000)
             );
         }
     };
@@ -123,7 +119,7 @@ const EditExchanges = props => {
                                     name="market"
                                     value={currentExchange.market}
                                     onChange={handleInputChange}
-                                    // validations={required}
+                                    validations={[required]}
                                 />
                             </div>
 
@@ -135,7 +131,7 @@ const EditExchanges = props => {
                                     name="exchange"
                                     value={currentExchange.exchange}
                                     onChange={handleInputChange}
-                                    // validations={required}
+                                    validations={[required]}
                                 />
                             </div>
                             
@@ -147,7 +143,7 @@ const EditExchanges = props => {
                                     name="value"
                                     value={currentExchange.value}
                                     onChange={handleInputChange}
-                                    // validations={required}
+                                    validations={[required]}
                                 />
                             </div>
                             
@@ -159,7 +155,7 @@ const EditExchanges = props => {
                                     name="amount"
                                     value={currentExchange.amount}
                                     onChange={handleInputChange}
-                                    // validations={required}
+                                    validations={[required]}
                                 />
                             </div>
 
@@ -171,7 +167,7 @@ const EditExchanges = props => {
                                     name="price"
                                     value={currentExchange.price}
                                     onChange={handleInputChange}
-                                    // validations={required}
+                                    validations={[required]}
                                 />
                             </div>
                             
@@ -189,7 +185,7 @@ const EditExchanges = props => {
 
                             <div>
                                 <button 
-                                    className="btn badge-pill badge-danger mr-2" 
+                                    className="btn-delete mr-2" 
                                     data-toggle="button" 
                                     onClick={deleteExchange}
                                 >
@@ -197,7 +193,7 @@ const EditExchanges = props => {
                                 </button>
 
                                 <button
-                                    className="btn badge-pill badge-success mr-2" 
+                                    className="btn-success mr-2" 
                                     data-toggle="button"
                                 >
                                     Atualizar
