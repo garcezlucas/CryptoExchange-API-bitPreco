@@ -3,13 +3,10 @@ package com.cryptoexchange.cryptoexchange.controllers;
 
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-// import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,11 +40,11 @@ public class CoinController {
     private CoinRepository coinRepository;
 
     @ApiOperation(value="Cria uma nova criptomoeda")
-    // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/btc-brl/ticket - GET
     @GetMapping("/{market}/ticker")
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 201, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
     public ResponseEntity<CoinResponse> getByMarket(@PathVariable("market") String market) {
@@ -103,87 +100,87 @@ public class CoinController {
     }
 
     @ApiOperation(value = "Lista todas as criptomoeda")
-    // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
-    //localhost:8080/api/auth/coins?list/all - GET
+    //localhost:8080/api/auth/coins/list/all - GET
     @GetMapping(value = "/coins/list/all")
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 201, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
     public ResponseEntity<List<Coin>> listCoins(){
         
         // Retorna uma lista com todas as criptomoeda
-        return new ResponseEntity<List<Coin>>(coinRepository.findAll(), HttpStatus.OK);
+        return ResponseEntity.ok().body(coinRepository.findAll());
     }
 
     @ApiOperation(value = "Buscando lista de criptomoeda por nome", produces = "application/json")
-    // @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/users/?username=bob - GET
     @GetMapping("/coins/find/{market}")
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 201, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    public ResponseEntity<List<Coin>>findByName(@PathVariable("market") String market){
+    public ResponseEntity<?>findByName(@PathVariable("market") String market){
 
         // Busca o usuário no BD através do nome da criptomoeda
         List<Coin> _coins = coinRepository.findCoinByMarket(market);
         //Verifica se a criptomoeda é nula
         if(_coins == null){
             // Retorna resposta da criptomoeda não encontrada
-            return new ResponseEntity<List<Coin>>(_coins,HttpStatus.NOT_FOUND);
+            return ResponseEntity.badRequest().body(new MessageResponse("Criptomoeda não encontrada"));
         }
         // Retorna uma lista com as informações da criptomoeda pesquisada
-        return new ResponseEntity<List<Coin>>(_coins, HttpStatus.OK);
+        return ResponseEntity.ok().body(_coins);
     }
 
     @ApiOperation(value = "Busca uma criptomoeda através de seu Id")
-    // @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/coins/list/1 - GET
     @GetMapping(value = "/coins/list/{id}")
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 201, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    public ResponseEntity <Optional<Coin>> listCoinsById(@PathVariable("id") Long id){
+    public ResponseEntity <?> listCoinsById(@PathVariable("id") Long id){
 
         // verifica se o id é nulo
         if (id == null) {
             // Retorna uma mensagem de criptomoeda não encontrada se o id for nulo
-            return new ResponseEntity<Optional<Coin>>(coinRepository.findById(id),HttpStatus.NOT_FOUND);   
+            return ResponseEntity.badRequest().body(new MessageResponse("Criptomoeda não encontrada"));
         }else {
             // Retorna uma criptomoeda definida pelo Id
-            return new ResponseEntity<Optional<Coin>>(coinRepository.findById(id), HttpStatus.OK);
+            return ResponseEntity.ok().body(coinRepository.findById(id));
         }
     }
 
     @ApiOperation(value = "Buscando criptomoeda por nome", produces = "application/json")
-    // @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/users/?username=bob - GET
     @GetMapping("/coins/{market}")
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 201, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    public ResponseEntity<Coin>getByName(@PathVariable("market") String market){
+    public ResponseEntity<?>getByName(@PathVariable("market") String market){
 
         // Busca o usuário no BD através do nome da criptomoeda
         Coin _coins = coinRepository.getCoinByMarket(market);
         //Verifica se a criptomoeda é nula
         if(_coins == null){
             // Retorna resposta da criptomoeda não encontrado
-            return new ResponseEntity<Coin>(_coins,HttpStatus.NOT_FOUND);
+            return ResponseEntity.badRequest().body(new MessageResponse("Criptomoeda não encontrada"));
         }
         // Retorna uma lista com as informações da criptomoeda pesquisada
-        return new ResponseEntity<Coin>(_coins, HttpStatus.OK);
+        return ResponseEntity.ok().body(_coins);
     }
 
     @ApiOperation(value = "Atualiza as informações de uma criptomoeda manualmente através de seu Id")
-    // @PreAuthorize("hasRole('ROLE_PREMIUM') or hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/coins/update/1 - PUT
     @PutMapping("/coins/update/{id}")
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 201, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
     public ResponseEntity<?> update (@PathVariable("id") Long id, @RequestBody Coin coin){
@@ -211,11 +208,11 @@ public class CoinController {
     }
 
     @ApiOperation(value = "Deleta uma criptomoeda através de seu Id")
-    // @PreAuthorize("hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/coins/delete/1 - DELETE
     @DeleteMapping(value = "/coins/delete/{id}")
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 201, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
     public ResponseEntity<?> delete (@PathVariable("id") Long id) {
@@ -225,18 +222,18 @@ public class CoinController {
         // Verifica se o id é igual a nulo
         if (id == null) {
             //Retorna uma resposta de não encontrado caso o id seje nulo
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);   
+            return ResponseEntity.badRequest().body(new MessageResponse("Criptomoeda não encontrada"));
         }
             // Retorna uma mensagem de criptomoeda deletada com sucesso
             return ResponseEntity.ok(new MessageResponse("Criptomoeda deletada com sucesso!"));
     }
 
     @ApiOperation(value = "Deleta todas criptomoedas do BD")
-    // @PreAuthorize("hasRole('ROLE_ADMIN')")
     //localhost:8080/api/auth/coins/delete/1 - DELETE
     @DeleteMapping(value = "/coins/delete/all")
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 201, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
     public ResponseEntity<?> delete () {

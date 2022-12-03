@@ -22,8 +22,6 @@ import com.cryptoexchange.cryptoexchange.securities.services.UserDetailsServiceI
 
 @Configuration
 @EnableGlobalMethodSecurity(
-    // securedEnabled = true,
-    // jsr250Enabled = true,
     prePostEnabled = true)
 public class WebSecurityConfig {
 

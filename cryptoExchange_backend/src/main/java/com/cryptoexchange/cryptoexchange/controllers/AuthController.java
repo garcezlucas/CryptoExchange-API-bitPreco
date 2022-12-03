@@ -46,7 +46,7 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*")
 @Api(value = "API de autenticação de usuário")
 public class AuthController{
     
@@ -73,6 +73,7 @@ public class AuthController{
     @PostMapping("/signin")
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 201, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -186,6 +187,7 @@ public class AuthController{
     //localhost:8080/api/auth/refreshtoken - POST
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 201, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
     public ResponseEntity<?> refreshtoken(HttpServletRequest request) {
@@ -220,6 +222,7 @@ public class AuthController{
     @PostMapping("/signout")
     @ApiResponses({
         @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 201, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
     public ResponseEntity<?> logoutUser() {

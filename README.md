@@ -15,7 +15,7 @@ Api pode ser encontrada no endereço: `https://api.bitpreco.com/`
     Utilizacao do FeignClient para consumo de API externa;
 
 ##### `Implementacao do BD`
-    Utilizado o PostgreSQL;
+    Utilizado o H2Database;
     Utilizacao do JPA Repository para gerenciamento do BD;
 
 ##### `Implementacao do CRUD API do bitPreco`
